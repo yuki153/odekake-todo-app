@@ -55,7 +55,10 @@ module.exports = {
   /*
   ** Build configuration
   */
+  buildDir: '../functions/nuxt',
   build: {
+    publicPath: '/assets/',
+    extractCSS: true,
     /*
     ** You can extend webpack config here
     */
