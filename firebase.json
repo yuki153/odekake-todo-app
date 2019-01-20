@@ -5,9 +5,13 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ]
+    ],
+    "rewrites": [{
+      "source": "**",
+      "function": "ssrapp"
+    }]    
   },
   "functions": {
-    "predeploy": "npm --prefix \"$RESOURCE_DIR\" run build"
+    "predeploy": "npm --prefix functions run build"
   }
 }
