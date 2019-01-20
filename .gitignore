@@ -82,3 +82,9 @@ dist
 
 # Service worker
 sw.*
+
+#firebase
+.firebase/
+public/assets/
+functions/lib/
+functions/nuxt/
