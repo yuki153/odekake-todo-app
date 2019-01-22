@@ -17,13 +17,13 @@
 ターミナルで下記コマンドを打ちます
 
 ```bash
-#① firebase コマンドを実行できない場合は firebase-tools をインストールします
+# ①firebase コマンドを実行できない場合は firebase-tools をインストールします
   npm install -g firebase-tools
 
-#② firebase へログインします
+# ②firebase へログインします
   firebase login
 
-#③ 各ディレクトリに対して yarn install を実行します。
+# ③各ディレクトリに対して yarn install を実行します。
   yarn setup
 ```
 
