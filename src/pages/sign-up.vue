@@ -14,6 +14,7 @@
 import firebase from '~/plugins/firebase';
 
 export default {
+  layout: 'login',
   data () {
     return {
       username: '',
