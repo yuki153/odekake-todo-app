@@ -1,25 +1,7 @@
 <template>
   <section class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        travel-plan-application
-      </h1>
-      <h2 class="subtitle">
-        My Nuxt.js project
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green"
-        >Documentation</a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >GitHub</a>
-      </div>
+    <div v-if="isLogin">
+      <h1>HelloWorld</h1>
     </div>
   </section>
 </template>
@@ -30,6 +12,22 @@ import Logo from '~/components/Logo.vue'
 export default {
   components: {
     Logo
+  },
+  data() {
+    return {
+      isLogin: this.$store.getters.isLogin,
+      user: this.$store.state.user,
+    }
+  },
+  mounted() {
+    if (!this.isLogin) {
+      alert('自動ログインの有効期限が切れました。\nもう一度ログインし直してください');
+      this.$router.push('/sign-in');
+    } else {
+      console.log(this.$store.state.user);
+      console.log(this.isLogin);
+      console.log(this.user.email);
+    }
   }
 }
 </script>
