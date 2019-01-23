@@ -6,8 +6,8 @@
 
 <style lang="scss" scoped>
 
-$logoSize1: 128px;
-$logoSize2: 168px;
+$logoSize1: 84px;
+$logoSize2: 136px;
 
 .loginLogo {
   position: relative;
