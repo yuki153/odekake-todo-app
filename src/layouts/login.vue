@@ -4,7 +4,7 @@
       <h1>{{isSignIn ? 'ログイン画面' : '新規アカウント登録'}}</h1>
     </header>
     <nuxt />
-    <ul class="loginMenu">
+    <ul :class="`loginMenu${isHide ? ' isHide' : ''}`">
       <li :class="`loginMenu__item${isSignIn ? ' isSelected' : ''}`"><nuxt-link to="/sign-in">ログイン画面</nuxt-link></li>
       <li :class="`loginMenu__item${isSignIn ? '' : ' isSelected'}`"><nuxt-link to="/sign-up">新規登録</nuxt-link></li>
     </ul>
@@ -13,15 +13,32 @@
 
 <script>
 export default {
+  data() {
+    return {
+      isHide: false,
+    }
+  },
   computed: {
     isSignIn: function() {
       return this.$route.name === 'sign-in';
     }
+  },
+  mounted() {
+    this.$el.addEventListener('DOMFocusIn', (e) => {
+      if (e.target.tagName === 'INPUT') {
+        this.isHide = true;
+      }
+    })
+    this.$el.addEventListener('DOMFocusOut', (e) => {
+      if (e.target.tagName === 'INPUT') {
+        this.isHide = false;
+      }
+    })
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -36,25 +53,29 @@ html {
 
 header {
   width: 100%;
-  height: 50px;
+  height: 40px;
   background-color: #fc471e;
   color: #fff;
   h1 {
-    font-size: 16px;
-    line-height: 50px;
+    font-size: 14px;
+    line-height: 40px;
     text-align: center;
   }
 }
 
 .loginMenu {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 0;
   list-style: none;
   display: flex;
   width: 100%;
-  height: 50px;
+  height: 48px;
   box-shadow: #ccc 0 0 8px 2px;
+
+  &.isHide {
+    display: none;
+  }
 
   &__item {
     background-color: #fff;
@@ -62,7 +83,7 @@ header {
     width: 50%;
     height: 100%;
     text-align: center;
-    line-height: 50px;
+    line-height: 48px;
 
     &.isSelected {
       background-color: #fc471e;

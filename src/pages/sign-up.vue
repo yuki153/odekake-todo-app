@@ -1,13 +1,13 @@
 <template>
-  <div class="signin">
+  <div class="signup">
     <login-logo/>
-    <section class="signin__section">
-      <h2 class="signin__title">メールとパスワードで新規登録する</h2>
-      <form>
-        <input type="text" placeholder="Email" v-model="username">
-        <input type="password" placeholder="Password" v-model="password">
+    <section class="signup__section">
+      <h2 class="signup__title">メールとパスワードで新規登録する</h2>
+      <form class="signup__form">
+        <input class="signup__input" type="text" placeholder="Email" v-model="email">
+        <input class="signup__input" type="password" placeholder="Password" v-model="password">
       </form>
-      <button class="signin_button" @click="signUp">登録</button>
+      <button :class="`signup__button${validation ? ' isActive' : ''}`" @click="signUp">登録</button>
     </section>
   </div>
 </template>
@@ -20,12 +20,21 @@ export default {
   components: {
     LoginLogo
   },
-  layout: "login",
+  layout: 'login',
   data() {
     return {
-      username: "",
-      password: ""
+      email: '',
+      password: ''
     };
+  },
+  computed: {
+    validation: function() {
+      if (this.password && this.email) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   },
   methods: {
     signUp: function() {
@@ -45,44 +54,55 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.signin__section {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  align-items: center;
-}
-.signin__title {
-  font-size: 14px;
-  color: #333;
-  margin-bottom: 14px;
-}
+.signup {
 
-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  height: 100px;
-  margin-bottom: 14px;
-}
+  &__section {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+  }
 
-input {
-  width: 68%;
-  height: 44px;
-  padding: 0 10px;
-  border: 1px solid #fc471e;
-  border-radius: 8px;
-}
+  &__title {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 10px;
+  }
 
-.signin_button {
-  width: 120px;
-  height: 44px;
-  background-color: #ccc;
-  color: #fff;
-  font-weight: bold;
-  border-radius: 8px;
-  box-shadow: #ddd 0 3px 6px 0px;
+  &__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 90px;
+    margin-bottom: 14px;
+  }
+
+  &__input {
+    width: 68%;
+    height: 40px;
+    padding: 0 10px;
+    border: 1px solid #fc471e;
+    border-radius: 8px;
+    outline-color: transparent
+  }
+
+  &__button {
+    width: 100px;
+    height: 40px;
+    background-color: #ccc;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 8px;
+    box-shadow: #ddd 0 3px 6px 0px;
+
+    &.isActive {
+      background-color: #fc471e;
+      box-shadow: #bbb 0 3px 6px 0px;
+    }
+  }
 }
 </style>
 
