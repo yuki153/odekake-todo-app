@@ -7,11 +7,11 @@
         <input type="text" placeholder="Email" v-model="username">
         <input type="password" placeholder="Password" v-model="password">
       </form>
-      <button class="signin__button" @click="SignIn">ログイン</button>
+      <button class="signin__button" @click="signIn">ログイン</button>
     </section>
     <section class="signin__section">
       <h2 class="signin__title">Google アカウントでログインする</h2>
-      <button class="signin__button" @click="SignIn">ログイン</button>
+      <button class="signin__button" @click="signInByGoogle">ログイン</button>
     </section>
   </div>
 </template>
@@ -32,27 +32,45 @@ export default {
     }
   },
   mounted() {
-    console.log(firebase.auth().currentUser);
-  },
-  methods: {
-    SignIn: function() {
-      firebase.auth().signInWithEmailAndPassword(this.username, this.password).then(
-        resolve => {
-          alert('Success!');
-          // firebase document for user management
-          // https://firebase.google.com/docs/auth/web/manage-users?hl=ja
-          const user = firebase.auth().currentUser;
-          console.log(`${this.$store} store`);
-          this.$store.dispatch({
+    // google からのログイン情報取得が遅く、null になる
+    // console.log(firebase.auth().currentUser, 'current');
+
+    console.log('mounted');
+    // onAuthStateChanged は結果が返るまで待つっぽい
+    firebase.auth().onAuthStateChanged((result) => {
+      if (result) {
+          const user = result;
+            this.$store.dispatch({
             type: 'setUser',
             obj: user
           });
           this.$router.push('/');
-        },
+      } else {
+        console.log('ログイン情報なし');
+      }
+    });
+    firebase.auth().getRedirectResult().then(
+      result => {},
+      err => {
+        alert(err.message)
+      }
+    )
+  },
+  beforeUpdate () {
+    console.log('Update');
+  },
+  methods: {
+    signIn: function() {
+      firebase.auth().signInWithEmailAndPassword(this.username, this.password).then(
+        result => {},
         err => {
           alert(err.message)
         }
       )
+    },
+    signInByGoogle: function() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithRedirect(provider);
     }
   }
 }
