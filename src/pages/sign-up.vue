@@ -1,66 +1,108 @@
 <template>
   <div class="signup">
-    <h2>Sign up</h2>
-    <input type="text" placeholder="Username" v-model="username">
-    <input type="password" placeholder="Password" v-model="password">
-    <button @click="signUp">Register</button>
-    <p>Do you have an account?
-      <router-link to="/signin">sign in now!!</router-link>
-    </p>
+    <login-logo/>
+    <section class="signup__section">
+      <h2 class="signup__title">メールとパスワードで新規登録する</h2>
+      <form class="signup__form">
+        <input class="signup__input" type="text" placeholder="Email" v-model="email">
+        <input class="signup__input" type="password" placeholder="Password" v-model="password">
+      </form>
+      <button :class="`signup__button${validation ? ' isActive' : ''}`" @click="signUp">登録</button>
+    </section>
   </div>
 </template>
 
 <script>
-import firebase from '~/plugins/firebase';
+import firebase from "~/plugins/firebase";
+import LoginLogo from "~/components/login-logo.vue";
 
 export default {
-  data () {
+  components: {
+    LoginLogo
+  },
+  layout: 'login',
+  data() {
     return {
-      username: '',
+      email: '',
       password: ''
+    };
+  },
+  computed: {
+    validation: function() {
+      if (this.password && this.email) {
+        return true;
+      } else {
+        return false;
+      }
     }
   },
   methods: {
     signUp: function() {
-      console.log('signup');
-      firebase.auth().createUserWithEmailAndPassword(this.username, this.password)
-        .then((user) => {
-          alert('Successful account creation')
+      console.log("signup");
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(this.username, this.password)
+        .then(user => {
+          alert("Successful account creation");
         })
-        .catch((err) => {
-          alert(err.message)
-        })
+        .catch(err => {
+          alert(err.message);
+        });
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.signup {
+
+  &__section {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__title {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 90px;
+    margin-bottom: 14px;
+  }
+
+  &__input {
+    width: 68%;
+    height: 40px;
+    padding: 0 10px;
+    border: 1px solid #fc471e;
+    border-radius: 8px;
+    outline-color: transparent
+  }
+
+  &__button {
+    width: 100px;
+    height: 40px;
+    background-color: #ccc;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 8px;
+    box-shadow: #ddd 0 3px 6px 0px;
+
+    &.isActive {
+      background-color: #fc471e;
+      box-shadow: #bbb 0 3px 6px 0px;
     }
   }
 }
-</script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-.signup {
-  margin-top: 20px;
-
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  align-items: center
-}
-input {
-  margin: 10px 0;
-  padding: 10px;
-}
 </style>
+
