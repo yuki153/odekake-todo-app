@@ -1,33 +1,33 @@
 <template>
   <section class="container">
-    <div v-if="isLogin">
+    <div v-if="isUser">
       <h1>HelloWorld</h1>
     </div>
   </section>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+import firebase from "~/plugins/firebase";
 
 export default {
-  components: {
-    Logo
-  },
+  layout: 'default',
   data() {
     return {
-      isLogin: this.$store.getters.isLogin,
-      user: this.$store.state.user,
+      isUser: false,
+      user: {},
     }
   },
   mounted() {
-    if (!this.isLogin) {
+      this.isUser = this.$store.getters.isUser;
+      this.user = firebase.auth().currentUser
+    if (!this.isUser) {
       alert('自動ログインの有効期限が切れました。\nもう一度ログインし直してください');
       this.$router.push('/sign-in');
     } else {
-      console.log(this.$store.state.user);
-      console.log(this.isLogin);
-      console.log(this.user.email);
+      // console.log(firebase.auth().currentUser);
     }
+  },
+  updated() {
   }
 }
 </script>

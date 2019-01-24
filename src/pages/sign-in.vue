@@ -46,14 +46,14 @@ export default {
 
     console.log('mounted');
     // onAuthStateChanged は結果が返るまで待つっぽい
-    firebase.auth().onAuthStateChanged((result) => {
+    firebase.auth().onAuthStateChanged(result => {
       if (result) {
-          const user = result;
+         // const user = result;
             this.$store.dispatch({
             type: 'setUser',
-            obj: user
+            bool: true // user
           });
-          this.$router.push('/');
+          return this.$router.push('/');
       } else {
         console.log('ログイン情報なし');
       }

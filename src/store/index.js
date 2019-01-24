@@ -8,30 +8,32 @@ Vue.use(Vuex);
 // https://qiita.com/nasum/items/d17c0a628e6c32616b85
 const createStore = () => {
   return new Vuex.Store({
-    strict: false,
     state: () => ({
       counter: 0,
-      user: {},
+      isUser: false,
     }),
     mutations: {
       increment(state) {
         state.counter++
       },
       setUser(state, payload) {
-        state.user = payload.obj;
+        state.isUser = payload.bool;
+        console.log('mutations');
       }
     },
     actions: {
       setUser(context, payload) {
+        console.log('actions');
         context.commit({
           type: 'setUser',
-          obj: payload.obj,
+          bool: payload.bool,
         });
       }
     },
     getters:{
-      isLogin(state) {
-        return !!Object.keys(state.user).length;
+      isUser(state) {
+        console.log('getters');
+        return state.isUser; //!!Object.keys(state.user).length;
       }
     }
   })
