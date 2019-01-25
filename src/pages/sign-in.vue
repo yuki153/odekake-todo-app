@@ -1,6 +1,6 @@
 <template>
   <div class="signin">
-    <Login-Logo/>
+    <app-logo/>
     <section class="signin__section">
       <h2 class="signin__title">メールとパスワードでログインする</h2>
       <form class="signin__form">
@@ -18,11 +18,11 @@
 
 <script>
 import firebase from '~/plugins/firebase';
-import LoginLogo from '~/components/login-logo.vue'
+import AppLogo from '~/components/app-logo.vue'
 
 export default {
   components: {
-    LoginLogo
+    AppLogo
   },
   layout: 'login',
   data () {
@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     signIn: function() {
-      firebase.auth().signInWithEmailAndPassword(this.username, this.password).then(
+      firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
         result => {},
         err => {
           alert(err.message)
@@ -89,7 +89,6 @@ export default {
   &__section {
     display: flex;
     flex-flow: column nowrap;
-    justify-content: center;
     align-items: center;
     margin-bottom: 24px;
 
