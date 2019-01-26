@@ -7,7 +7,7 @@
         <input class="signup__input" type="text" placeholder="Email" v-model="email">
         <input class="signup__input" type="password" placeholder="Password" v-model="password">
       </form>
-      <button :class="`signup__button${validation ? ' isActive' : ''}`" @click="signUp">登録</button>
+      <app-button :isActived="validation" @click.native="signUp">登録</app-button>
     </section>
   </div>
 </template>
@@ -15,10 +15,12 @@
 <script>
 import firebase from "~/plugins/firebase";
 import AppLogo from "~/components/app-logo.vue";
+import AppButton from '~/components/app-button';
 
 export default {
   components: {
-    AppLogo
+    AppLogo,
+    AppButton
   },
   layout: 'login',
   data() {
@@ -88,21 +90,6 @@ export default {
     outline-color: transparent
   }
 
-  &__button {
-    width: 100px;
-    height: 40px;
-    background-color: #ccc;
-    color: #fff;
-    font-size: 12px;
-    font-weight: bold;
-    border-radius: 8px;
-    box-shadow: #ddd 0 3px 6px 0px;
-
-    &.isActive {
-      background-color: #fc471e;
-      box-shadow: #bbb 0 3px 6px 0px;
-    }
-  }
 }
 </style>
 
