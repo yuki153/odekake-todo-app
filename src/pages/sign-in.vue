@@ -1,5 +1,6 @@
 <template>
   <div class="signin">
+    <app-loading :isHide="isLoginChecked"/>
     <app-logo/>
     <section class="signin__section">
       <h2 class="signin__title">メールとパスワードでログインする</h2>
@@ -20,17 +21,20 @@
 import firebase from '~/plugins/firebase';
 import AppLogo from '~/components/app-logo.vue'
 import AppButton from '~/components/app-button';
+import AppLoading from '~/components/app-loading';
 
 export default {
   components: {
     AppLogo,
-    AppButton
+    AppButton,
+    AppLoading
   },
   layout: 'login',
   data () {
     return {
       email: '',
       password: '',
+      isLoginChecked: false,
     }
   },
   computed: {
@@ -45,18 +49,16 @@ export default {
   mounted() {
     // google からのログイン情報取得が遅く、null になる
     // console.log(firebase.auth().currentUser, 'current');
-
     console.log('mounted');
-    // onAuthStateChanged は結果が返るまで待つっぽい
     firebase.auth().onAuthStateChanged(result => {
       if (result) {
-         // const user = result;
             this.$store.dispatch({
             type: 'setUser',
-            bool: true // user
+            bool: true
           });
           return this.$router.push('/');
       } else {
+        this.isLoginChecked = true;
         console.log('ログイン情報なし');
       }
     });

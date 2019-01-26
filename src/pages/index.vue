@@ -1,35 +1,41 @@
 <template>
-  <section class="container">
-    <div v-if="isUser">
+  <div>
+    <app-loadding :isHide="isUser"/>
+    <section class="container">
       <h1>HelloWorld</h1>
-    </div>
-  </section>
+    </section>
+  </div>
 </template>
 
 <script>
 import firebase from "~/plugins/firebase";
+import AppLoadding from '~/components/app-loading.vue'
 
 export default {
-  layout: 'default',
+  layout: "default",
+  components: {
+    AppLoadding,
+  },
   data() {
     return {
       isUser: false,
-      user: {},
-    }
+      user: {}
+    };
   },
   mounted() {
-      this.isUser = this.$store.getters.isUser;
-      this.user = firebase.auth().currentUser
+    this.isUser = this.$store.getters.isUser;
     if (!this.isUser) {
-      alert('自動ログインの有効期限が切れました。\nもう一度ログインし直してください');
-      this.$router.push('/sign-in');
-    } else {
-      // console.log(firebase.auth().currentUser);
+      firebase.auth().onAuthStateChanged((result) => {
+        if (result) {
+          this.isUser = true;
+          this.user = result;
+        } else {
+          this.$router.push("/sign-in");
+        }
+      });
     }
   },
-  updated() {
-  }
-}
+};
 </script>
 
 <style>
@@ -43,8 +49,8 @@ export default {
 }
 
 .title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   display: block;
   font-weight: 300;
   font-size: 100px;
