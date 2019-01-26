@@ -1,6 +1,6 @@
 <template>
-  <div class="loginLogo">
-    <div class="loginLogo__logo"></div>
+  <div class="AppLogo">
+    <div class="AppLogo__logo"></div>
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 $logoSize1: 84px;
 $logoSize2: 136px;
 
-.loginLogo {
+.AppLogo {
   position: relative;
   margin: 0 auto;
   width: $logoSize1;
@@ -26,7 +26,7 @@ $logoSize2: 136px;
   }
 }
 @media screen and (min-width: 370px){
-  .loginLogo {
+  .AppLogo {
     width: $logoSize2;
     height: $logoSize2;
   }

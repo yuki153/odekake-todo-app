@@ -1,6 +1,6 @@
 <template>
   <div class="signup">
-    <login-logo/>
+    <app-logo/>
     <section class="signup__section">
       <h2 class="signup__title">メールとパスワードで新規登録する</h2>
       <form class="signup__form">
@@ -14,11 +14,11 @@
 
 <script>
 import firebase from "~/plugins/firebase";
-import LoginLogo from "~/components/login-logo.vue";
+import AppLogo from "~/components/app-logo.vue";
 
 export default {
   components: {
-    LoginLogo
+    AppLogo
   },
   layout: 'login',
   data() {

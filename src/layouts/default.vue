@@ -1,9 +1,21 @@
 <template>
   <div>
+    <app-header/>
     <nuxt />
+    <app-footer/>
   </div>
 </template>
+<script>
+import AppHeader from '~/components/app-header.vue';
+import AppFooter from '~/components/app-footer.vue';
 
+export default {
+  components: {
+    AppHeader,
+    AppFooter
+  }
+}
+</script>
 <style>
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
