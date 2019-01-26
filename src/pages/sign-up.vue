@@ -43,7 +43,7 @@ export default {
       console.log("signup");
       firebase
         .auth()
-        .createUserWithEmailAndPassword(this.username, this.password)
+        .createUserWithEmailAndPassword(this.email, this.password)
         .then(user => {
           alert("Successful account creation");
         })
