@@ -1,8 +1,8 @@
 <template>
-  <div class="main">
+  <div class="list">
     <app-loadding :isHide="isUser"/>
-    <section class="main__section">
-      <h1>HelloWorld</h1>
+    <section class="list__section">
+      <h1>ListPage</h1>
       <add-button/>
     </section>
   </div>
@@ -14,7 +14,7 @@ import AppLoadding from '~/components/app-loading'
 import AddButton from '~/components/add-button'
 
 export default {
-  layout: 'default',
+  layout: "default",
   components: {
     AppLoadding,
     AddButton
@@ -32,10 +32,6 @@ export default {
         if (result) {
           this.isUser = true;
           this.user = result;
-          this.$store.dispatch({
-            type: 'setUser',
-            bool: true
-          });
         } else {
           this.$router.push("/sign-in");
         }
@@ -46,7 +42,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.main {
+.list {
   &__section {
     display: flex;
     flex-flow: column nowrap;

@@ -14,7 +14,7 @@ import AppButton from '~/components/app-button';
 import AppLogo from '~/components/app-logo.vue'
 
 export default {
-  layout: 'default',
+  layout: "default",
   components: {
     AppButton,
     AppLogo
@@ -49,12 +49,13 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .signout {
   position: absolute;
   top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
+  width: 100%;
 
   &__section {
     display: flex;

@@ -4,8 +4,8 @@
     <section class="signup__section">
       <h2 class="signup__title">メールとパスワードで新規登録する</h2>
       <form class="signup__form">
-        <input class="signup__input" type="text" placeholder="Email" v-model="email">
-        <input class="signup__input" type="password" placeholder="Password" v-model="password">
+        <input class="signup__input" type="text" placeholder="Email" autocomplete="off" v-model="email">
+        <input class="signup__input" type="password" placeholder="Password" autocomplete="off" v-model="password">
       </form>
       <app-button :isActived="validation" @click.native="signUp">登録</app-button>
     </section>
@@ -14,7 +14,7 @@
 
 <script>
 import firebase from "~/plugins/firebase";
-import AppLogo from "~/components/app-logo.vue";
+import AppLogo from "~/components/app-logo";
 import AppButton from '~/components/app-button';
 
 export default {
@@ -85,7 +85,7 @@ export default {
     width: 68%;
     height: 40px;
     padding: 0 10px;
-    border: 1px solid #fc471e;
+    border: 1px solid $app-color;
     border-radius: 8px;
     outline-color: transparent
   }
