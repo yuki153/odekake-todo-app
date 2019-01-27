@@ -43,8 +43,12 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+
     // Doc: https://bootstrap-vue.js.org/docs/
     //'bootstrap-vue/nuxt'
+
+    // https://github.com/anteriovieira/nuxt-sass-resources-loader
+    ['nuxt-sass-resources-loader', '@/assets/scss/variable.scss']
   ],
   /*
   ** Axios module configuration
