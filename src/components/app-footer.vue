@@ -47,7 +47,7 @@ export default {
   position: fixed;
   bottom: 0;
   left: 0;
-  height: 48px;
+  height: $app-footer-height;
   width: 100%;
   background-color: #fff;
   color: #aaa;
@@ -65,7 +65,7 @@ export default {
     height: 100%;
 
     &.isSelected {
-      color: #fc471e;
+      color: $app-color;
     }
 
     a {

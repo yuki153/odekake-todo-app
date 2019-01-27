@@ -22,7 +22,7 @@ export default {
     box-shadow: #ddd 0 3px 6px 0px;
 
     &.isActive {
-      background-color: #fc471e;
+      background-color: $app-color;
       box-shadow: #bbb 0 3px 6px 0px;
     }
   }

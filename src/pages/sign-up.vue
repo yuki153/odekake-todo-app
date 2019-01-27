@@ -85,7 +85,7 @@ export default {
     width: 68%;
     height: 40px;
     padding: 0 10px;
-    border: 1px solid #fc471e;
+    border: 1px solid $app-color;
     border-radius: 8px;
     outline-color: transparent
   }

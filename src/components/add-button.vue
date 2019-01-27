@@ -18,7 +18,7 @@ export default {
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background-color: #fc471e;
+    background-color: $app-color;
     box-shadow: #ddd 0 3px 6px 0px;
     outline: none;
 

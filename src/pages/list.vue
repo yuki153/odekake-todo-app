@@ -48,7 +48,7 @@ export default {
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - (48px + 48px));
+    height: calc(100vh - (#{$app-header-height + $app-footer-height}));
   }
 }
 </style>

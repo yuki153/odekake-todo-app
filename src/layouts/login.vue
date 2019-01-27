@@ -42,7 +42,7 @@ export default {
 header {
   width: 100%;
   height: 40px;
-  background-color: #fc471e;
+  background-color: $app-color;
   color: #fff;
   h1 {
     font-size: 14px;
@@ -67,14 +67,14 @@ header {
 
   &__item {
     background-color: #fff;
-    color: #fc471e;
+    color: $app-color;
     width: 50%;
     height: 100%;
     text-align: center;
     line-height: 48px;
 
     &.isSelected {
-      background-color: #fc471e;
+      background-color: $app-color;
       color: #fff;
     }
 

@@ -5,7 +5,7 @@
 
 <style lang="scss">
 .appHeader {
-  height: 48px;
-  background-color: #fc471e;
+  height: $app-header-height;
+  background-color: $app-color;
 }
 </style>
