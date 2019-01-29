@@ -14,8 +14,8 @@
 
 <script>
 import firebase from "~/plugins/firebase";
-import AppLogo from "~/components/app-logo";
-import AppButton from '~/components/app-button';
+import AppLogo from "~/components/simple/app-logo";
+import AppButton from '~/components/simple/app-button';
 
 export default {
   components: {
