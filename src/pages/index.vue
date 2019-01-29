@@ -10,8 +10,8 @@
 
 <script>
 import firebase from "~/plugins/firebase";
-import AppLoadding from '~/components/app-loading'
-import AddButton from '~/components/add-button'
+import AppLoadding from '~/components/simple/app-loading'
+import AddButton from '~/components/simple/add-button'
 
 export default {
   layout: 'default',
