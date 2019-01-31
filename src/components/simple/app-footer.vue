@@ -1,9 +1,9 @@
 <template>
   <footer class="appFooter">
     <ul class="appFooter__items">
-      <li class="appFooter__item"><nuxt-link to="/">計画内容</nuxt-link></li>
-      <li class="appFooter__item"><nuxt-link to="/list">計画一覧</nuxt-link></li>
-      <li class="appFooter__item"><nuxt-link to="/sign-out">ログアウト</nuxt-link></li>
+      <li class="appFooter__item"><n-link to="/">計画内容</n-link></li>
+      <li class="appFooter__item"><n-link to="/list">計画一覧</n-link></li>
+      <li class="appFooter__item"><n-link to="/sign-out">ログアウト</n-link></li>
     </ul>
   </footer>
 </template>
