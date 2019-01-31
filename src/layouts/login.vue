@@ -5,8 +5,8 @@
     </header>
     <nuxt />
     <ul :class="`loginMenu${isHide ? ' isHide' : ''}`">
-      <li :class="`loginMenu__item${isSignIn ? ' isSelected' : ''}`"><nuxt-link to="/sign-in">ログイン画面</nuxt-link></li>
-      <li :class="`loginMenu__item${isSignIn ? '' : ' isSelected'}`"><nuxt-link to="/sign-up">新規登録</nuxt-link></li>
+      <li :class="`loginMenu__item${isSignIn ? ' isSelected' : ''}`"><n-link to="/sign-in">ログイン画面</n-link></li>
+      <li :class="`loginMenu__item${isSignIn ? '' : ' isSelected'}`"><n-link to="/sign-up">新規登録</n-link></li>
     </ul>
   </div>
 </template>
