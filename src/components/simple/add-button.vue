@@ -24,15 +24,12 @@ export default {
     outline: none;
     z-index: 90;
 
-    &.isActive {
-      box-shadow: #333 0 3px 6px 0px;
-    }
-
     &__graphic {
       position: absolute;
       width: 26px;
       height: 6px;
       background-color: #fff;
+      transition: .3s;
 
       &.-stick01 {
         transform: translate(-50%,-50%);
@@ -44,7 +41,19 @@ export default {
         top: 50%;
         left: 50%;
       }
+    }
 
+    &.isActive {
+      box-shadow: #333 0 3px 6px 0px;
+
+      .addButton__graphic {
+        &.-stick01 {
+          transform: translate(-50%,-50%) rotate(45deg);
+        }
+        &.-stick02 {
+          transform: translate(-50%,-50%) rotate(135deg);
+        }
+      }
     }
   }
 </style>
