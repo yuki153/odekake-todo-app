@@ -3,7 +3,7 @@
     <app-loadding :isHide="isUser"/>
     <section class="main__section">
       <h1>HelloWorld</h1>
-      <add-button/>
+      <modal-button/>
     </section>
   </div>
 </template>
@@ -11,13 +11,13 @@
 <script>
 import firebase from "~/plugins/firebase";
 import AppLoadding from '~/components/simple/app-loading'
-import AddButton from '~/components/simple/add-button'
+import ModalButton from '~/components/mix/modal-button'
 
 export default {
   layout: 'default',
   components: {
     AppLoadding,
-    AddButton
+    ModalButton
   },
   data() {
     return {
