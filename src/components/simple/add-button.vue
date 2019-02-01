@@ -1,5 +1,5 @@
 <template>
-  <button class="addButton">
+  <button :class="`addButton${isActive ? ' isActive': ''}`">
     <div class="addButton__graphic -stick01"></div>
     <div class="addButton__graphic -stick02"></div>
   </button>
@@ -7,6 +7,7 @@
 <script>
 export default {
   props: {
+    isActive: Boolean
   }
 }
 </script>
@@ -21,6 +22,11 @@ export default {
     background-color: $app-color;
     box-shadow: #ddd 0 3px 6px 0px;
     outline: none;
+    z-index: 90;
+
+    &.isActive {
+      box-shadow: #333 0 3px 6px 0px;
+    }
 
     &__graphic {
       position: absolute;
