@@ -19,6 +19,28 @@ export default {
     AppLoadding,
     AddButton
   },
+  methods: {
+    getFireStoreData: async function() {
+      const data = await firebase.firestore().collection('test').get().catch((err) => console.log(err));
+      await data.forEach((doc) => {
+        console.log(`${doc.id} => ${doc.data()}`);
+        console.log(doc.data());
+      });
+    },
+    updateFireStoreData: async function(collectionName, docName) {
+      const target = firebase.firestore().collection(collectionName).doc(docName);
+      await target.update({ test: true }).catch((err) => console.log(err))
+      await console.log('update success');
+    },
+    setFireStoreData: async function(docName) {
+      const docRef = await firebase.firestore().collection('test').doc(docName).set({
+        first: 'hello',
+        last: 'world',
+        born: 1815
+      }).catch((err) => console.log("Error adding document: ", err));
+      await console.log("Document written with ID: ", docRef.id);
+    },
+  },
   data() {
     return {
       isUser: false,
@@ -32,6 +54,7 @@ export default {
         if (result) {
           this.isUser = true;
           this.user = result;
+          this.getFireStoreData();
         } else {
           this.$router.push("/sign-in");
         }
