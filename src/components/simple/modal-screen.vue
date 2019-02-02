@@ -24,8 +24,8 @@ export default {
   align-items: center;
   width: 100vw;
   height: 100vh;
-  background-color: #000;
-  opacity: .7;
+  background-color: rgba(0, 0, 0, .7);
+  opacity: 1;
   z-index: 80;
   transition: .3s,
 }
