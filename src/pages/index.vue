@@ -2,7 +2,7 @@
   <div class="main">
     <app-loadding :isHide="isUser"/>
     <section class="main__section">
-      <h1>HelloWorld</h1>
+      <todo-list/>
       <modal-button/>
     </section>
   </div>
@@ -12,12 +12,14 @@
 import firebase from "~/plugins/firebase";
 import AppLoadding from '~/components/simple/app-loading'
 import ModalButton from '~/components/mix/modal-button'
+import TodoList from '~/components/mix/todo-list'
 
 export default {
   layout: 'default',
   components: {
     AppLoadding,
-    ModalButton
+    ModalButton,
+    TodoList,
   },
   data() {
     return {
@@ -50,9 +52,10 @@ export default {
   &__section {
     display: flex;
     flex-flow: column nowrap;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     height: calc(100vh - (#{$app-header-height + $app-footer-height}));
+    padding: 16px 16px 0;
   }
 }
 </style>
