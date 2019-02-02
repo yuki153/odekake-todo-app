@@ -1,9 +1,9 @@
 <template>
   <div class="todoList">
     <ul class="todoList__items">
-      <li class="todoList__item"><todo-item/></li>
-      <li class="todoList__item"><todo-item/></li>
-      <li class="todoList__item"><todo-item/></li>
+      <li v-for="item of todoItemState" :key="item.id" class="todoList__item">
+        <todo-item :iconColor="item.hexCode"/>
+      </li>
     </ul>
   </div>
 </template>
@@ -13,6 +13,11 @@ import TodoItem from '~/components/mix/todo-item';
 export default {
   components: {
     TodoItem,
+  },
+  data() {
+    return {
+      todoItemState: this.$store.state.todoItem
+    }
   }
 };
 </script>

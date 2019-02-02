@@ -5,7 +5,7 @@
         <p class="iconList__title">アイコンを選択してください</p>
         <ul class="iconList__items">
           <li v-for="(hexCode, index) of hexCodes" :key="index" class="iconList__item">
-            <circle-icon :color="hexCode" :size="48"/>
+            <circle-icon :color="hexCode" :size="48" @click.native="clickHandler(hexCode)"/>
           </li>
         </ul>
       </div>
@@ -29,6 +29,7 @@ export default {
     return {
       isModalState: false,
       isButtonState: false,
+      id: 0,
       hexCodes: [
         '#81B468',
         '#4f9b4e',
@@ -49,6 +50,16 @@ export default {
     toggleModalState: function() {
       this.isModalState = !this.isModalState;
       this.isButtonState = this.isModalState === true;
+    },
+    clickHandler: function(hex, path = '') {
+      this.toggleModalState();
+      this.id++;
+      console.log(hex);
+      this.$store.commit('setTodoItem', {
+        id: this.id,
+        hexCode: hex,
+        svgPath: path,
+      });
     }
   }
 }
