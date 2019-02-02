@@ -11,6 +11,7 @@ const createStore = () => {
     state: () => ({
       counter: 0,
       isUser: false,
+      todoItem: [],
     }),
     mutations: {
       increment(state) {
@@ -19,6 +20,14 @@ const createStore = () => {
       setUser(state, payload) {
         state.isUser = payload.bool;
         console.log('mutations');
+      },
+      setTodoItem(state, payload) {
+        const data = {
+          id: payload.id,
+          hexCode: payload.hexCode,
+          svgPath: payload.svgPath,
+        }
+        state.todoItem.push(data);
       }
     },
     actions: {
