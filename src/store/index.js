@@ -10,25 +10,29 @@ const createStore = () => {
   return new Vuex.Store({
     state: () => ({
       counter: 0,
+      isShowModal: false,
       isUser: false,
+      todoItemId: 0,
       todoItem: [],
     }),
     mutations: {
-      increment(state) {
-        state.counter++
+      incrementToId(state) {
+        state.todoItemId++;
+      },
+      changeModalState(state) {
+        state.isShowModal = !state.isShowModal;
       },
       setUser(state, payload) {
         state.isUser = payload.bool;
-        console.log('mutations');
       },
       setTodoItem(state, payload) {
         const data = {
-          id: payload.id,
+          id: state.todoItemId++,
           hexCode: payload.hexCode,
           svgPath: payload.svgPath,
         }
         state.todoItem.push(data);
-      }
+      },
     },
     actions: {
       setUser(context, payload) {
@@ -37,13 +41,13 @@ const createStore = () => {
           type: 'setUser',
           bool: payload.bool,
         });
-      }
+      },
     },
     getters:{
       isUser(state) {
         console.log('getters');
         return state.isUser; //!!Object.keys(state.user).length;
-      }
+      },
     }
   })
 }
