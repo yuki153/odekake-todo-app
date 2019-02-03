@@ -3,22 +3,25 @@
     <app-loadding :isHide="isUser"/>
     <section class="main__section">
       <todo-list/>
-      <modal-button/>
+      <mix-modal-screen/>
+      <mix-action-button/>
     </section>
   </div>
 </template>
 
 <script>
 import firebase from "~/plugins/firebase";
-import AppLoadding from '~/components/simple/app-loading'
-import ModalButton from '~/components/mix/modal-button'
-import TodoList from '~/components/mix/todo-list'
+import AppLoadding from '~/components/simple/app-loading';
+import MixActionButton from '~/components/mix/mix-action-button';
+import MixModalScreen from '~/components/mix/mix-modal-screen';
+import TodoList from '~/components/mix/todo-list';
 
 export default {
   layout: 'default',
   components: {
     AppLoadding,
-    ModalButton,
+    MixActionButton,
+    MixModalScreen,
     TodoList,
   },
   data() {
