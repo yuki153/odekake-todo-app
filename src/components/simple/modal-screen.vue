@@ -26,7 +26,7 @@ export default {
   height: 100vh;
   background-color: rgba(0, 0, 0, .7);
   opacity: 1;
-  z-index: 80;
+  z-index: 100;
   transition: .3s,
 }
 
