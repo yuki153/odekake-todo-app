@@ -14,6 +14,8 @@ const createStore = () => {
       isUser: false,
       todoItemId: 0,
       todoItem: [],
+      isDeletable: false,
+      deleteIdList: [],
     }),
     mutations: {
       incrementToId(state) {
@@ -33,6 +35,32 @@ const createStore = () => {
         }
         state.todoItem.push(data);
       },
+      isDeletable(state) {
+        state.isDeletable = !state.isDeletable;
+      },
+      addDeleteIdList(state, payload) {
+        state.deleteIdList.push(payload.id);
+      },
+      removeDeleteIdList(state, payload) {
+        const idx = state.deleteIdList.indexOf(payload.id);
+        if (idx >= 0) state.deleteIdList.splice(idx, 1);
+        console.log(state.deleteIdList);
+      },
+      deleteTodoItem(state) {
+        state.isDeletable = false;
+        const itemLen = state.todoItem.length;
+        const items = state.todoItem;
+        let indices = [];
+        for (let i = 0; i < itemLen; i++) {
+          for (const deleteId of state.deleteIdList) {
+            if (items[i].id == deleteId) indices.push(i);
+          }
+        }
+        for (let i = 0; i < indices.length; i++) {
+          indices[i] -= i; // 配列のズレ補正
+          state.todoItem.splice(indices[i], 1);
+        }
+      }
     },
     actions: {
       setUser(context, payload) {
