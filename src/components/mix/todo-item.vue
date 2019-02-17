@@ -1,7 +1,10 @@
 <template>
   <div class="todoItem">
     <div class="todoItem__content">
-      <circle-icon :color="iconColor" :size="32"/>
+      <circle-icon
+        :color="iconColor"
+        :img="iconImg"
+        :size="32"/>
     </div>
     <div class="todoItem__content">
       <todo-time/>
@@ -24,6 +27,7 @@ export default {
   },
   props: {
     iconColor: String,
+    iconImg: String,
   }
 };
 </script>
