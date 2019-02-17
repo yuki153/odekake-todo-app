@@ -1,5 +1,8 @@
 <template>
-  <button :class="`addButton${isActive ? ' isActive': ''}`">
+  <button
+    v-if="isShow"
+    :class="`addButton${isActive ? ' isActive': ''}`"
+    >
     <div class="addButton__graphic -stick01"></div>
     <div class="addButton__graphic -stick02"></div>
   </button>
@@ -7,7 +10,8 @@
 <script>
 export default {
   props: {
-    isActive: Boolean
+    isActive: Boolean,
+    isShow: Boolean
   }
 }
 </script>

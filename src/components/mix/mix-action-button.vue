@@ -4,25 +4,39 @@
       <ul class="actionContent__list">
         <li class="actionContent__item">新規作成</li>
         <li class="actionContent__item" @click="showModal">予定の追加</li>
-        <li class="actionContent__item">予定の削除</li>
+        <li class="actionContent__item" @click="prepareDelete">予定の削除</li>
       </ul>
     </div>
-    <add-button :isActive="isButtonState" @click.native="toggleState"/>
+    <add-button
+      :isShow="!isDeletable"
+      :isActive="isButtonState"
+      @click.native="toggleState"/>
+    <delete-button
+      :isShow="isDeletable"
+      @click.native="confirmDelete"
+    />
   </div>
 </template>
 
 <script>
 import AddButton from "~/components/simple/add-button";
+import DeleteButton from "~/components/simple/delete-button";
 
 export default {
   components: {
     AddButton,
+    DeleteButton
   },
   data() {
     return {
       isButtonState: false,
       isHide: true,
     };
+  },
+  computed: {
+    isDeletable: function() {
+      return this.$store.state.isDeletable;
+    }
   },
   methods: {
     toggleState: function() {
@@ -32,6 +46,14 @@ export default {
     showModal: function() {
       this.toggleState();
       this.$store.commit('changeModalState');
+    },
+    prepareDelete: function() {
+      this.toggleState();
+      this.$store.commit('isDeletable'); // true
+    },
+    confirmDelete: function() {
+      console.log('Delete');
+      this.$store.commit('deleteTodoItem');
     }
   },
 };
