@@ -21,6 +21,7 @@
 <script>
 import AddButton from "~/components/simple/add-button";
 import DeleteButton from "~/components/simple/delete-button";
+import { mapState } from 'vuex';
 
 export default {
   components: {
@@ -34,9 +35,9 @@ export default {
     };
   },
   computed: {
-    isDeletable: function() {
-      return this.$store.state.isDeletable;
-    }
+    ...mapState('todo-item', [
+      'isDeletable'
+    ])
   },
   methods: {
     toggleState: function() {
@@ -45,15 +46,15 @@ export default {
     },
     showModal: function() {
       this.toggleState();
-      this.$store.commit('changeModalState');
+      this.$store.commit('modal-screen/enableState');
     },
     prepareDelete: function() {
       this.toggleState();
-      this.$store.commit('isDeletable'); // true
+      this.$store.commit('todo-item/isDeletable'); // true
     },
     confirmDelete: function() {
       console.log('Delete');
-      this.$store.commit('deleteTodoItem');
+      this.$store.commit('todo-item/deleteData');
     }
   },
 };

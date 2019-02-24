@@ -26,7 +26,7 @@ export default {
     }
   },
   mounted() {
-      this.isUser = this.$store.getters.isUser;
+      this.isUser = this.$store.getters['user/isUser'];
       this.user = firebase.auth().currentUser
     if (!this.isUser) {
       alert('自動ログインの有効期限が切れました。\nもう一度ログインし直してください');

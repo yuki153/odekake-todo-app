@@ -17,6 +17,8 @@
 <script>
 import ModalScreen from '~/components/simple/modal-screen';
 import CircleIcon from '~/components/simple/circle-icon';
+import { mapState } from 'vuex';
+
 import icoHuman from '~/assets/svg/ico-human.svg';
 import icoTrain from '~/assets/svg/ico-train.svg';
 import icoCar from '~/assets/svg/ico-car.svg';
@@ -54,17 +56,17 @@ export default {
     }
   },
   computed: {
-      getModalState: function() {
-        return this.$store.state.isShowModal;
-      }
+    ...mapState('modal-screen', {
+      getModalState: (state) => state.isShow,
+    })
   },
   methods: {
     clickHandler: function(hex, path) {
-      this.$store.commit('setTodoItem', {
+      this.$store.commit('todo-item/setData', {
         hexCode: hex,
         svgPath: path,
       });
-      this.$store.commit('changeModalState');
+      this.$store.commit('modal-screen/disableState');
     }
   }
 }

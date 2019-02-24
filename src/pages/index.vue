@@ -31,14 +31,14 @@ export default {
     };
   },
   mounted() {
-    this.isUser = this.$store.getters.isUser;
+    this.isUser = this.$store.getters['user/isUser'];
     if (!this.isUser) {
       firebase.auth().onAuthStateChanged((result) => {
         if (result) {
           this.isUser = true;
           this.user = result;
           this.$store.dispatch({
-            type: 'setUser',
+            type: 'user/setUser',
             bool: true
           });
         } else {

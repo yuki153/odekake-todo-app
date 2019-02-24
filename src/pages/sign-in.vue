@@ -53,7 +53,7 @@ export default {
     firebase.auth().onAuthStateChanged(result => {
       if (result) {
           this.$store.dispatch({
-            type: 'setUser',
+            type: 'user/setUser',
             bool: true
           });
           return this.$router.push('/');
