@@ -3,49 +3,46 @@
     <ul class="todoList__items">
       <li
         class="todoList__item"
-        v-for="item of todoItemState"
-        :key="item.id">
+        v-for="datum of data"
+        :key="datum.id">
         <div
           v-if="isDeletable"
           class="todoList__deleteOption"
-          :data-id="item.id"
+          :data-id="datum.id"
           @click="toggleCheckmark">
         </div>
         <todo-item
-          :iconColor="item.hexCode"
-          :iconImg="item.svgPath"/>
+          :iconColor="datum.hexCode"
+          :iconImg="datum.svgPath"/>
       </li>
     </ul>
   </div>
 </template>
 <script>
 import TodoItem from '~/components/mix/todo-item';
+import { mapState } from 'vuex';
 
 export default {
   components: {
     TodoItem,
   },
-  data() {
-    return {
-      todoItemState: this.$store.state.todoItem,
-    }
-  },
   computed: {
-    isDeletable: function() {
-      return this.$store.state.isDeletable;
-    }
+    ...mapState('todo-item', [
+      'isDeletable',
+      'data'
+    ])
   },
   methods: {
     toggleCheckmark: function(e) {
       e.target.classList.toggle('isChecked');
       if (e.target.classList.contains('isChecked')) {
-        console.log(`commit addDeleteIdList:${e.target.dataset.id}`);
-        this.$store.commit('addDeleteIdList', {
+        console.log(`commit addDeletionIds:${e.target.dataset.id}`);
+        this.$store.commit('todo-item/addDeletionIds', {
           id: e.target.dataset.id
         });
       } else {
-        console.log(`commit removeDeleteIdList:${e.target.dataset.id}`);
-        this.$store.commit('removeDeleteIdList', {
+        console.log(`commit removeDeletionIds:${e.target.dataset.id}`);
+        this.$store.commit('todo-item/removeDeletionIds', {
           id: e.target.dataset.id
         });
       }

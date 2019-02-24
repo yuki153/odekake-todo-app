@@ -48,7 +48,7 @@ export default {
     };
   },
   mounted() {
-    this.isUser = this.$store.getters.isUser;
+    this.isUser = this.$store.getters['user/isUser'];
     if (!this.isUser) {
       firebase.auth().onAuthStateChanged((result) => {
         if (result) {
