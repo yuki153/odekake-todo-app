@@ -13,7 +13,10 @@
         </div>
         <todo-item
           :iconColor="datum.hexCode"
-          :iconImg="datum.svgPath"/>
+          :iconImg="datum.svgName"
+          :text="datum.text"
+          :hour="datum.time.h"
+          :min="datum.time.m"/>
       </li>
     </ul>
   </div>

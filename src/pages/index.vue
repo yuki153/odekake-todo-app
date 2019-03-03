@@ -10,11 +10,12 @@
 </template>
 
 <script>
-import firebase from "~/plugins/firebase";
+import FirebaseQuery from "~/plugins/firebase-query.js";
 import AppLoadding from '~/components/simple/app-loading';
 import MixActionButton from '~/components/mix/mix-action-button';
 import MixModalScreen from '~/components/mix/mix-modal-screen';
 import TodoList from '~/components/mix/todo-list';
+const fb = new FirebaseQuery();
 
 export default {
   layout: 'default',
@@ -30,21 +31,30 @@ export default {
       user: {}
     };
   },
-  mounted() {
+  async mounted() {
     this.isUser = this.$store.getters['user/isUser'];
     if (!this.isUser) {
-      firebase.auth().onAuthStateChanged((result) => {
-        if (result) {
-          this.isUser = true;
-          this.user = result;
-          this.$store.dispatch({
-            type: 'user/setUser',
-            bool: true
+      const user = await fb.getAuthState();
+      console.log(user)
+      if (user) {
+        this.isUser = true;
+        this.user = user;
+        this.$store.dispatch({
+          type: 'user/setUser',
+          bool: true
+        });
+        const { data } = await fb.getStoreData('todoItem','devUser1');
+        for (const datum of data) {
+          this.$store.commit('todo-item/setData', {
+            hexCode: datum.hexCode,
+            svgName: datum.svgName,
+            text: datum.text,
+            time: datum.time,
           });
-        } else {
-          this.$router.push("/sign-in");
         }
-      });
+      } else {
+        this.$router.push("/sign-in");
+      }
     }
   },
 };

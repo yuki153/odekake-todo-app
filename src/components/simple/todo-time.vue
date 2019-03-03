@@ -93,7 +93,34 @@
   </div>
 </template>
 <script>
-export default {};
+export default {
+  props: {
+    hour: String,
+    min: String,
+  },
+  mounted() { 
+    if(this.hour) {
+      const h = document.getElementById('selectedate-h');
+      for (const child of h.children) {
+        if(child.value === this.hour) {
+          child.selected = true;
+        } else {
+          child.selected = false;
+        }
+      }
+    }
+    if (this.min) {
+      const m = document.getElementById('selectedate-m');
+      for (const child of m.children) {
+        if(child.value === this.min) {
+          child.selected = true;
+        } else {
+          child.selected = false;
+        }
+      }
+    }
+  }
+};
 </script>
 <style lang="scss" scoped>
 .todoTime {
@@ -110,7 +137,7 @@ export default {};
 
     &::before {
       position: absolute;
-      transform: translate(-50%,-50%);
+      transform: translate(-50%, -50%);
       top: 50%;
       left: 50%;
       content: ":";

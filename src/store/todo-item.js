@@ -13,8 +13,11 @@ export const mutations = {
     const data = {
       id: state.id++,
       hexCode: payload.hexCode,
-      svgPath: payload.svgPath,
+      svgName: payload.svgName,
+      text: payload.text || '',
+      time: payload.time || '',
     }
+    console.log('setData', data.time);
     state.data.push(data);
   },
   isDeletable(state) {

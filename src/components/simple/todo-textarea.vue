@@ -1,9 +1,15 @@
 <template>
-  <textarea class="todoTextarea" placeholder="予定を入力してください"></textarea>
+  <textarea
+    class="todoTextarea"
+    placeholder="予定を入力してください"
+    :value="text">
+  </textarea>
 </template>
 <script>
 export default {
-  
+  props: {
+    text: String,
+  }
 }
 </script>
 <style lang="scss" scoped>
