@@ -1,3 +1,6 @@
+import FirebaseQuery from "~/plugins/firebase-query.js";
+const fb = new FirebaseQuery();
+
 export const state = () => ({
   id: 0,
   data: [],
@@ -6,18 +9,29 @@ export const state = () => ({
 });
 
 export const mutations = {
-  incrementToId(state) {
-    state.id++;
-  },
-  setData(state, payload) {
+  init(state, payload) {
+    state.id = payload.id; // TODO: 並び順問題
     const data = {
       id: state.id++,
       hexCode: payload.hexCode,
       svgName: payload.svgName,
       text: payload.text || '',
-      time: payload.time || '',
+      time: payload.time || { h: '00', m: '00' },
+    };
+    state.data.push(data);
+  },
+  setData(state, payload) {
+    const data = {
+      id: state.id++, // state.id は data.id に格納された後 +1 される
+      hexCode: payload.hexCode,
+      svgName: payload.svgName,
+      text: payload.text || '',
+      time: payload.time || { h: '00', m: '00' },
     }
-    console.log('setData', data.time);
+    const fbData = {};
+    const key = `item${data.id}`;
+    fbData[key] = data;
+    fb.setStoreData('todoItem', 'devUser1', 'data', 'plan1', fbData);
     state.data.push(data);
   },
   isDeletable(state) {
