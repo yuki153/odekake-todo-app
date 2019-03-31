@@ -52,7 +52,10 @@ export const mutations = {
     let indices = [];
     for (let i = 0; i < itemLen; i++) {
       for (const deleteId of state.deletionIds) {
+        // delete 対象の ID を持つ item の配列番号を取得
         if (items[i].id == deleteId) indices.push(i);
+        // db の場合は直接 ID 名で field から特定できるため削除
+        fb.delStoreData('todoItem', 'devUser1', 'data', 'plan1', `item${deleteId}`);
       }
     }
     for (let i = 0; i < indices.length; i++) {
