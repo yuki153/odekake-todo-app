@@ -43,14 +43,17 @@ export default {
           type: 'user/setUser',
           bool: true
         });
-        const { data } = await fb.getStoreData('todoItem','devUser1');
-        for (const datum of data) {
-          this.$store.commit('todo-item/setData', {
-            hexCode: datum.hexCode,
-            svgName: datum.svgName,
-            text: datum.text,
-            time: datum.time,
-          });
+        const data = await fb.getStoreData('todoItem','devUser1', 'data', 'plan1');
+        if (data) {
+          for (const key of Object.keys(data)) {
+            this.$store.commit('todo-item/init', {
+              id: data[key].id,
+              hexCode: data[key].hexCode,
+              svgName: data[key].svgName,
+              text: data[key].text,
+              time: data[key].time,
+            });
+          }
         }
       } else {
         this.$router.push("/sign-in");

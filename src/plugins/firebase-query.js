@@ -15,8 +15,9 @@ export default class {
       });
     });
   }
-  async getStoreData(collection ,docName) {
-    const docRef = await firebase.firestore().collection(collection).doc(docName);
+  async getStoreData(collection ,docName, subCollection, subDocName) {
+    const docRef = await firebase.firestore().collection(collection).doc(docName)
+      .collection(subCollection).doc(subDocName);
     const res = await docRef.get().catch((err) => console.log(err));
     return res.data();
   }
@@ -25,12 +26,18 @@ export default class {
     await target.update({ test: true }).catch((err) => console.log(err))
     await console.log('update success');
   }
-  async setStoreData(docName) {
-    const docRef = await firebase.firestore().collection('test').doc(docName).set({
-      first: 'hello',
-      last: 'world',
-      born: 1815
-    }).catch((err) => console.log("Error adding document: ", err));
+  async setStoreData(collection ,docName, subCollection, subDocName, data) {
+    const docRef = await firebase.firestore().collection(collection).doc(docName)
+      .collection(subCollection).doc(subDocName);
+    await docRef.set(data, {merge: true}).catch((err) => console.log("Error adding document: ", err));
     await console.log("Document written with ID: ", docRef.id);
+  }
+  async delStoreData(collection ,docName, subCollection, subDocName, fieldName) {
+    const docRef = await firebase.firestore().collection(collection).doc(docName)
+      .collection(subCollection).doc(subDocName);
+    const delData = {};
+    const key = fieldName;
+    delData[key] = (() => firebase.firestore.FieldValue.delete())();
+    await docRef.update(delData).catch((err) => console.log("Error delete field: ", err));
   }
 }
