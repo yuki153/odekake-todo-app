@@ -48,10 +48,23 @@ export default {
     })
   },
   methods: {
-    clickHandler: function(hex, path) {
+    getNowTime() {
+      const today = new Date();
+      let hour = today.getHours();
+      let min = today.getMinutes();
+      min = 10 > min ? `0${min}` : `${min}`;
+      hour = 10 > hour ? `0${hour}` : `${hour}`;
+      return { hour, min };
+    },
+    clickHandler(hex, path) {
+      const { hour, min } = this.getNowTime();
       this.$store.commit('todo-item/setData', {
         hexCode: hex,
         svgName: path,
+        time: {
+          h: hour,
+          m: min,
+        }
       });
       this.$store.commit('modal-screen/disableState');
     }
