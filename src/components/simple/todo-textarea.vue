@@ -2,13 +2,15 @@
   <textarea
     class="todoTextarea"
     placeholder="予定を入力してください"
-    :value="text">
+    @change="emit">
   </textarea>
 </template>
 <script>
 export default {
-  props: {
-    text: String,
+  methods: {
+    emit(e) {
+      this.$emit('emitValue', e.target.value);
+    }
   }
 }
 </script>

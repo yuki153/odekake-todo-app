@@ -99,6 +99,7 @@ export default {
     min: String,
   },
   mounted() {
+    console.log('mounted::todo-time');
     const form = this.$el.children[0];
     if(this.hour) {
       for (const child of form['selectedate-h'].children) {
@@ -122,9 +123,11 @@ export default {
   methods: {
     updateHour(e) {
       console.log(e.target.value);
+      this.$emit('emitHour', e.target.value);
     },
     updateMin(e) {
       console.log(e.target.value);
+      this.$emit('emitMin', e.target.value);
     }
   }
 };
