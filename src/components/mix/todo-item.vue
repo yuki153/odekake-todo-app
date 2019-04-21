@@ -7,25 +7,18 @@
         :size="32"/>
     </div>
     <div class="todoItem__content">
-      <todo-time
-      :hour="hour"
-      :min="min"/>
+      <div class="todoItem__time">{{ hour }}:{{ min }}</div>
     </div>
     <div class="todoItem__content">
-      <todo-textarea
-        :text="text"/>
+      <p class="todoItem__text">{{ text }}</p>
     </div>
   </div>
 </template>
 <script>
-import TodoTime from "~/components/simple/todo-time";
-import TodoTextarea from "~/components/simple/todo-textarea";
 import CircleIcon from "~/components/simple/circle-icon";
 
 export default {
   components: {
-    TodoTime,
-    TodoTextarea,
     CircleIcon
   },
   props: {
@@ -47,6 +40,31 @@ export default {
       width: 100%;
       margin-right: 0;
     }
+  }
+
+  &__text {
+    background-color: #fff;
+    width: 100%;
+    min-height: 56px;
+    font-size: 12px;
+    padding: 4px;
+    border: 1px solid #c4c4c4;
+    &:empty {
+      &::before {
+        content: '予定を入力してください';
+        color: #999;
+      }
+    }
+  }
+
+  &__time {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 56px;
+    height: 24px;
+    background-color: #fff;
+    border: 1px solid #c4c4c4;
   }
 }
 </style>

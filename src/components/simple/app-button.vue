@@ -19,11 +19,11 @@ export default {
     font-size: 12px;
     font-weight: bold;
     border-radius: 8px;
-    box-shadow: #ddd 0 3px 6px 0px;
+    box-shadow: rgba(0, 0, 0, .4) 0 3px 6px 0px;
 
     &.isActive {
       background-color: $app-color;
-      box-shadow: #bbb 0 3px 6px 0px;
+      box-shadow: rgba(0, 0, 0, .4) 0 3px 6px 0px;
     }
   }
 </style>

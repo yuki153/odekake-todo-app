@@ -1,7 +1,7 @@
 <template>
   <div class="todoTime">
     <form class="todoTime__form">
-      <select class="todoTime__hour" name="selectedate-h" id="selectedate-h">
+      <select class="todoTime__hour" name="selectedate-h" @change="updateHour">
         <option value="00">00</option>
         <option value="01">01</option>
         <option value="02">02</option>
@@ -27,7 +27,7 @@
         <option value="22">22</option>
         <option value="23">23</option>
       </select>
-      <select class="todoTime__min" name="selectedate-m" id="selectedate-m">
+      <select class="todoTime__min" name="selectedate-m" @change="updateMin">
         <option value="00">00</option>
         <option value="01">01</option>
         <option value="02">02</option>
@@ -98,10 +98,11 @@ export default {
     hour: String,
     min: String,
   },
-  mounted() { 
+  mounted() {
+    console.log('mounted::todo-time');
+    const form = this.$el.children[0];
     if(this.hour) {
-      const h = document.getElementById('selectedate-h');
-      for (const child of h.children) {
+      for (const child of form['selectedate-h'].children) {
         if(child.value === this.hour) {
           child.selected = true;
         } else {
@@ -110,14 +111,23 @@ export default {
       }
     }
     if (this.min) {
-      const m = document.getElementById('selectedate-m');
-      for (const child of m.children) {
+      for (const child of form['selectedate-m'].children) {
         if(child.value === this.min) {
           child.selected = true;
         } else {
           child.selected = false;
         }
       }
+    }
+  },
+  methods: {
+    updateHour(e) {
+      console.log(e.target.value);
+      this.$emit('emitHour', e.target.value);
+    },
+    updateMin(e) {
+      console.log(e.target.value);
+      this.$emit('emitMin', e.target.value);
     }
   }
 };
