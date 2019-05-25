@@ -2,7 +2,7 @@
   <modal-screen :isShow="getModalState">
     <div class="wrap">
       <!-- アイコン選択画面 -->
-      <div :class="`iconList${isSelected ? ' is-hide' : ''}`">
+      <div :class="`iconList${getSelectState ? ' is-hide' : ''}`">
         <p class="iconList__title">アイコンを選択してください</p>
         <ul class="iconList__items">
           <li v-for="(icon, index) of icons" :key="index" class="iconList__item">
@@ -17,14 +17,14 @@
       </div>
 
       <!-- 予定入力画面 -->
-      <div :class="`setTodo${isSelected ? '' : ' is-hide'}`">
+      <div :class="`setTodo${getSelectState ? '' : ' is-hide'}`">
         <div class="setTodo__back" @click="backToIconSelect()">アイコン選択に戻る</div>
         <ul class="setTodo__settingList">
           <li class="setTodo__settingItem">
             <p class="setTodo__text">選択済みのアイコン</p>
             <circle-icon
-              :color="todo.icon.hexCode"
-              :img="todo.icon.svgName"
+              :color="getTodo.hexCode"
+              :img="getTodo.svgName"
               :size="48"/>
           </li>
           <li class="setTodo__settingItem">
@@ -32,16 +32,17 @@
             <todo-time
               @emitHour="getHour"
               @emitMin="getMin"
-              :hour="todo.time.hour"
-              :min="todo.time.min"/>
+              :hour="getTodo.time.hour"
+              :min="getTodo.time.min"/>
           </li>
           <li class="setTodo__settingItem">
             <p class="setTodo__text">予定の詳細</p>
-            <todo-textarea @emitValue="getText"/>
+            <todo-textarea @emitValue="getText" :text="getTodo.text"/>
           </li>
           <app-button
             :isActived="true"
-            @click.native="setDataInTodoItem(todo)"
+            @click.native="getUpdateState ?
+              updateDataInTodoItem(getTodo) : setDataInTodoItem(getTodo)"
           >決定</app-button>
         </ul>
       </div>
@@ -55,7 +56,7 @@ import CircleIcon from "~/components/simple/circle-icon";
 import TodoTextarea from "~/components/simple/todo-textarea";
 import TodoTime from "~/components/simple/todo-time";
 import AppButton from "~/components/simple/app-button";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   components: {
@@ -81,33 +82,32 @@ export default {
         { hexCode: "#92BFF4", svgName: "icoSun" },
         { hexCode: "#C587E2", svgName: "icoMoon" }
       ],
-      todo: {
-        icon: {
-          hexCode: '#999',
-          svgName: '',
-        },
-        time: {
-          hour: '00',
-          min: '00',
-        },
-        text: '',
-      },
-      // アイコン選択画面と予定入力画面の切り替えフラグ
-      isSelected: false,
     };
   },
   computed: {
     ...mapState("modal-screen", {
       getModalState: state => state.isShow
     }),
+    ...mapState('mix-modal-screen', {
+      getTodo: state => state.todo,
+      getUpdateState: state => state.isUpdate,
+      getSelectState: state => state.isSelected,
+    }),
   },
   mounted() {
     console.log('mounted::mix-modal-screen');
-    const { hour, min } = this.getNowTime();
-    this.todo.time.hour = hour;
-    this.todo.time.min = min;
   },
   methods: {
+    ...mapMutations('mix-modal-screen', [
+      'backToIconSelect',
+      'goToIconInfo',
+      'setTodoText',
+      'setTodoSvgName',
+      'setTodoHexCode',
+      'setTodoHour',
+      'setTodoMin',
+      'reset'
+    ]),
     getNowTime() {
       const today = new Date();
       let hour = today.getHours();
@@ -117,51 +117,58 @@ export default {
       return { hour, min };
     },
     selectIcon(hex, svg) {
-      this.todo.icon.hexCode = hex;
-      this.todo.icon.svgName = svg;
-      this.isSelected = true;
-    },
-    backToIconSelect() {
-      this.isSelected = false;
+      this.setTodoHexCode(hex);
+      this.setTodoSvgName(svg);
+      if (this.getTodo.time.hour === '00' && this.getTodo.time.min === '00') {
+        const { hour, min } = this.getNowTime();
+        this.setTodoHour(hour);
+        this.setTodoMin(min);
+      }
+      this.goToIconInfo();
     },
 
     // todo-textarea からの emit で値を受け取る関数
     getText(value) {
-      if (value) this.todo.text = value;
+      if (value) this.setTodoText(value);
     },
     // todo-time からの emit で値を受け取る関数
     getHour(value) {
-      if (value) this.todo.time.hour = value;
+      if (value) this.setTodoHour(value);
     },
     // todo-time からの emit で値を受け取る関数
     getMin(value) {
-      if (value) this.todo.time.min = value;
-    },
-    reset() {
-      this.todo.text = '',
-      this.backToIconSelect();
+      if (value) this.setTodoMin(value);
     },
     setDataInTodoItem(todo) {
-      const { icon: {
-        hexCode,
-        svgName,
-      }, time: {
-        hour,
-        min,
-      }, text } = todo;
-      this.$store.commit("todo-item/setData", {
-        hexCode,
-        svgName,
-        text,
+      const payload = {
+        text: todo.text,
+        hexCode: todo.hexCode,
+        svgName: todo.svgName,
         time: {
-          h: hour,
-          m: min
+          h: todo.time.hour,
+          m: todo.time.min,
         }
-      });
+      };
+      this.$store.commit("todo-item/setData", payload);
       this.reset();
       this.$store.commit("modal-screen/disableState");
     },
-  }
+    updateDataInTodoItem(todo) {
+      const payload = {
+        id: todo.id,
+        text: todo.text,
+        hexCode: todo.hexCode,
+        svgName: todo.svgName,
+        time: {
+          h: todo.time.hour,
+          m: todo.time.min,
+        }
+      };
+      this.$store.commit('todo-item/updateData', payload)
+      this.reset();
+      this.$store.commit("modal-screen/disableState");
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
