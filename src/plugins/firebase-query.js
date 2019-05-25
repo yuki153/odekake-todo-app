@@ -21,9 +21,10 @@ export default class {
     const res = await docRef.get().catch((err) => console.log(err));
     return res.data();
   }
-  async updateStoreData(collectionName, docName) {
-    const target = firebase.firestore().collection(collectionName).doc(docName);
-    await target.update({ test: true }).catch((err) => console.log(err))
+  async updateStoreData(collection ,docName, subCollection, subDocName, field) {
+    const docRef = await firebase.firestore().collection(collection).doc(docName)
+      .collection(subCollection).doc(subDocName);
+    await docRef.update(field).catch((err) => console.log(err));
     await console.log('update success');
   }
   async setStoreData(collection ,docName, subCollection, subDocName, data) {
