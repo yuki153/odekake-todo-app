@@ -16,7 +16,8 @@
           :iconImg="datum.svgName"
           :text="datum.text"
           :hour="datum.time.h"
-          :min="datum.time.m"/>
+          :min="datum.time.m"
+          @click.native="showModal(datum)"/>
       </li>
     </ul>
   </div>
@@ -49,7 +50,21 @@ export default {
           id: e.target.dataset.id
         });
       }
-    }
+    },
+    showModal: function(datum) {
+      console.log(datum);
+      this.$store.commit('mix-modal-screen/update', {
+        svgName: datum.svgName,
+        hexCode: datum.hexCode,
+        time: {
+          min: datum.time.m,
+          hour: datum.time.h,
+        },
+        text: datum.text,
+        id: datum.id,
+      });
+      this.$store.commit('modal-screen/enableState');
+    },
   }
 };
 </script>
