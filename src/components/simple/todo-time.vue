@@ -98,29 +98,38 @@ export default {
     hour: String,
     min: String,
   },
-  mounted() {
-    console.log('mounted::todo-time');
-    const form = this.$el.children[0];
-    if(this.hour) {
-      for (const child of form['selectedate-h'].children) {
-        if(child.value === this.hour) {
-          child.selected = true;
-        } else {
-          child.selected = false;
-        }
-      }
-    }
-    if (this.min) {
-      for (const child of form['selectedate-m'].children) {
-        if(child.value === this.min) {
-          child.selected = true;
-        } else {
-          child.selected = false;
-        }
-      }
+  watch: {
+    min: function (val, oldVal) {
+      console.log(val);
+      this.setTime();
     }
   },
+  mounted() {
+    console.log('mounted::todo-time');
+    this.setTime();
+  },
   methods: {
+    setTime() {
+      const form = this.$el.children[0];
+      if(this.hour) {
+        for (const child of form['selectedate-h'].children) {
+          if(child.value === this.hour) {
+            child.selected = true;
+          } else {
+            child.selected = false;
+          }
+        }
+      }
+      if (this.min) {
+        for (const child of form['selectedate-m'].children) {
+          if(child.value === this.min) {
+            child.selected = true;
+          } else {
+            child.selected = false;
+          }
+        }
+      }
+    },
     updateHour(e) {
       console.log(e.target.value);
       this.$emit('emitHour', e.target.value);

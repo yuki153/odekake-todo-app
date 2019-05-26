@@ -46,6 +46,7 @@ export default {
     },
     showModal: function() {
       this.toggleState();
+      this.$store.commit('mix-modal-screen/init');
       this.$store.commit('modal-screen/enableState');
     },
     prepareDelete: function() {

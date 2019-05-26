@@ -34,6 +34,23 @@ export const mutations = {
     fb.setStoreData('todoItem', 'devUser1', 'data', 'plan1', fbData);
     state.data.push(data);
   },
+  updateData(state, payload) {
+    const itemLen = state.data.length;
+    const items = state.data;
+    for (let i = 0; i < itemLen; i++) {
+      if (items[i].id == payload.id) {
+        console.log(items[i]);
+        items[i].text = payload.text;
+        items[i].time = payload.time;
+        items[i].hexCode = payload.hexCode;
+        items[i].svgName = payload.svgName;
+        const field = {};
+        const key = `item${payload.id}`;
+        field[key] = payload;
+        fb.updateStoreData('todoItem', 'devUser1', 'data', 'plan1', field);
+      }
+    }
+  },
   isDeletable(state) {
     state.isDeletable = !state.isDeletable;
   },
