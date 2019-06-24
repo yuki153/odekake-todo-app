@@ -2,7 +2,7 @@
   <div class="actionButton">
     <div :class="`actionContent${isHide ? ' isHide': ''}`">
       <ul class="actionContent__list">
-        <li class="actionContent__item">新規作成</li>
+        <li class="actionContent__item" @click="createNewData">新規作成</li>
         <li class="actionContent__item" @click="showModal">予定の追加</li>
         <li class="actionContent__item" @click="prepareDelete">予定の削除</li>
       </ul>
@@ -56,6 +56,9 @@ export default {
     confirmDelete: function() {
       console.log('Delete');
       this.$store.commit('todo-item/deleteData');
+    },
+    createNewData: function() {
+      this.$store.dispatch('todo-item/createNewData');
     }
   },
 };
