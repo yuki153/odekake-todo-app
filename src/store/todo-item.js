@@ -3,6 +3,7 @@ const fb = new FirebaseQuery();
 
 export const state = () => ({
   id: 0,
+  currentDataKeyName: 'plan1',
   data: [],
   isDeletable: false,
   deletionIds: [],
@@ -31,7 +32,7 @@ export const mutations = {
     const fbData = {};
     const key = `item${data.id}`;
     fbData[key] = data;
-    fb.setStoreData('todoItem', 'devUser1', 'data', 'plan1', fbData);
+    fb.setStoreData('todoItem', 'devUser1', 'data', state.currentDataKeyName, fbData);
     state.data.push(data);
   },
   updateData(state, payload) {
@@ -47,7 +48,7 @@ export const mutations = {
         const field = {};
         const key = `item${payload.id}`;
         field[key] = payload;
-        fb.updateStoreData('todoItem', 'devUser1', 'data', 'plan1', field);
+        fb.updateStoreData('todoItem', 'devUser1', 'data', state.currentDataKeyName, field);
       }
     }
   },
@@ -72,13 +73,26 @@ export const mutations = {
         // delete 対象の ID を持つ item の配列番号を取得
         if (items[i].id == deleteId) indices.push(i);
         // db の場合は直接 ID 名で field から特定できるため削除
-        fb.delStoreData('todoItem', 'devUser1', 'data', 'plan1', `item${deleteId}`);
+        fb.delStoreData('todoItem', 'devUser1', 'data', state.currentDataKeyName, `item${deleteId}`);
       }
     }
     for (let i = 0; i < indices.length; i++) {
       indices[i] -= i; // 配列のズレ補正
       state.data.splice(indices[i], 1);
     }
+  },
+  createNewData(state, id) {
+    console.log('Mutations::createNewData');
+    state.currentDataKeyName = id;
+    state.id= 0;
+    state.data = [];
+  }
+}
+
+export const actions = {
+  async createNewData(context) {
+    const id = await fb.addNewDoc('todoItem', 'devUser1', 'data');
+    context.commit('createNewData', id);
   }
 }
 

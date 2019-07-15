@@ -2,7 +2,12 @@
   <div class="list">
     <app-loadding :isHide="isUser"/>
     <section class="list__section">
-      <h1>ListPage</h1>
+      <ul class="list__todoNames">
+        <li class="list__todoName"
+          v-for="(datum, index) of data"
+          :key="index"
+          :data-id="datum.value">{{ datum.name }}</li>
+      </ul>
       <add-button/>
     </section>
   </div>
@@ -10,8 +15,9 @@
 
 <script>
 import firebase from "~/plugins/firebase";
-import AppLoadding from '~/components/simple/app-loading'
-import AddButton from '~/components/simple/add-button'
+import AppLoadding from '~/components/simple/app-loading';
+import AddButton from '~/components/simple/add-button';
+import { mapState } from 'vuex';
 
 export default {
   layout: "default",
@@ -19,46 +25,39 @@ export default {
     AppLoadding,
     AddButton
   },
-  methods: {
-    getFireStoreData: async function() {
-      const data = await firebase.firestore().collection('test').get().catch((err) => console.log(err));
-      await data.forEach((doc) => {
-        console.log(`${doc.id} => ${doc.data()}`);
-        console.log(doc.data());
-      });
-    },
-    updateFireStoreData: async function(collectionName, docName) {
-      const target = firebase.firestore().collection(collectionName).doc(docName);
-      await target.update({ test: true }).catch((err) => console.log(err))
-      await console.log('update success');
-    },
-    setFireStoreData: async function(docName) {
-      const docRef = await firebase.firestore().collection('test').doc(docName).set({
-        first: 'hello',
-        last: 'world',
-        born: 1815
-      }).catch((err) => console.log("Error adding document: ", err));
-      await console.log("Document written with ID: ", docRef.id);
-    },
-  },
   data() {
     return {
       isUser: false,
       user: {}
     };
   },
+
+  computed: {
+    ...mapState('list', [
+      'data'
+    ])
+  },
+
   mounted() {
+    console.log('PAGE::list');
     this.isUser = this.$store.getters['user/isUser'];
     if (!this.isUser) {
       firebase.auth().onAuthStateChanged((result) => {
         if (result) {
           this.isUser = true;
           this.user = result;
-          this.getFireStoreData();
+          this.init();
         } else {
           this.$router.push("/sign-in");
         }
       });
+    } else {
+      this.init();
+    }
+  },
+  methods: {
+    init() {
+      this.$store.dispatch('list/getList');
     }
   },
 };
@@ -72,6 +71,27 @@ export default {
     justify-content: center;
     align-items: center;
     height: calc(100vh - (#{$app-header-height + $app-footer-height}));
+  }
+  &__todoNames {
+    width: 100%;
+    height: 100%;
+    padding: 16px;
+    list-style: none;
+  }
+  &__todoName {
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    padding-left: 16px;
+    box-sizing: border-box;
+    background-color: #c4c4c4;
+    margin-bottom: 8px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    &.is-actived {
+      background: $app-color;
+    }
   }
 }
 </style>
