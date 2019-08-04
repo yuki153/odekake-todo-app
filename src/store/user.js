@@ -8,16 +8,6 @@ export const mutations = {
   },
 };
 
-export const actions = {
-  setUser(context, payload) {
-    console.log('actions');
-    context.commit({
-      type: 'setUser',
-      bool: payload.bool,
-    });
-  },
-};
-
 export const getters = {
   isUser(state) {
     console.log('getters');
