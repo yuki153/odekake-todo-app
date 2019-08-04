@@ -50,7 +50,7 @@ export default class {
     await docRef.update({
       list: firebase.firestore.FieldValue.arrayUnion({
         name: '新規作成リスト',
-        valur: newDoc.id,
+        value: newDoc.id,
       })
     }).catch((err) => console.log("Error adding document: ", err));
     return newDoc.id;
