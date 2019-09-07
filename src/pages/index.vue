@@ -15,6 +15,7 @@ import AppLoadding from '~/components/simple/app-loading';
 import MixActionButton from '~/components/mix/mix-action-button';
 import MixModalScreen from '~/components/mix/mix-modal-screen';
 import TodoList from '~/components/mix/todo-list';
+import { mapState } from 'vuex';
 const fb = new FirebaseQuery();
 
 export default {
@@ -25,36 +26,25 @@ export default {
     MixModalScreen,
     TodoList,
   },
+  computed: {
+    ...mapState('user', [
+      'isUser'
+    ]),
+  },
   data() {
     return {
-      isUser: false,
       user: {}
     };
   },
   async mounted() {
-    this.isUser = this.$store.getters['user/isUser'];
+    console.log('mounted::index');
     if (!this.isUser) {
       const user = await fb.getAuthState();
       console.log(user)
       if (user) {
-        this.isUser = true;
         this.user = user;
-        this.$store.dispatch({
-          type: 'user/setUser',
-          bool: true
-        });
-        const data = await fb.getStoreData('todoItem','devUser1', 'data', 'plan1');
-        if (data) {
-          for (const key of Object.keys(data)) {
-            this.$store.commit('todo-item/init', {
-              id: data[key].id,
-              hexCode: data[key].hexCode,
-              svgName: data[key].svgName,
-              text: data[key].text,
-              time: data[key].time,
-            });
-          }
-        }
+        this.$store.commit('user/setUser', { bool: true });
+        this.$store.dispatch('todo-item/getTodo', { uid: 'plan1' });
       } else {
         this.$router.push("/sign-in");
       }

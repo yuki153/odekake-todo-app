@@ -6,7 +6,9 @@
         <li class="list__todoName"
           v-for="(datum, index) of data"
           :key="index"
-          :data-id="datum.value">{{ datum.name }}</li>
+          :data-id="datum.value"
+          @click="switchToDo">{{ datum.name }}
+        </li>
       </ul>
       <add-button/>
     </section>
@@ -27,7 +29,6 @@ export default {
   },
   data() {
     return {
-      isUser: false,
       user: {}
     };
   },
@@ -35,17 +36,18 @@ export default {
   computed: {
     ...mapState('list', [
       'data'
-    ])
+    ]),
+    ...mapState('user', [
+      'isUser'
+    ]),
   },
 
-  mounted() {
+  async mounted() {
     console.log('PAGE::list');
-    this.isUser = this.$store.getters['user/isUser'];
     if (!this.isUser) {
       firebase.auth().onAuthStateChanged((result) => {
         if (result) {
-          this.isUser = true;
-          this.user = result;
+          this.$store.commit('user/setUser', { bool: true });
           this.init();
         } else {
           this.$router.push("/sign-in");
@@ -58,6 +60,14 @@ export default {
   methods: {
     init() {
       this.$store.dispatch('list/getList');
+    },
+    switchToDo(e) {
+      this.$store.commit('todo-item/switchToDo', {
+        key: e.target.dataset.id,
+      });
+      console.log('component::end switchToDo');
+      const uid = this.$store.getters['todo-item/uid'];
+      this.$store.dispatch('todo-item/getTodo', { uid });
     }
   },
 };

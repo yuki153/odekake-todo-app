@@ -11,15 +11,18 @@ export const state = () => ({
 
 export const mutations = {
   init(state, payload) {
-    state.id = payload.id; // TODO: 並び順問題
-    const data = {
-      id: state.id++,
-      hexCode: payload.hexCode,
-      svgName: payload.svgName,
-      text: payload.text || '',
-      time: payload.time || { h: '00', m: '00' },
-    };
-    state.data.push(data);
+    const { todo } = payload;
+    for (const key of Object.keys(todo)) {
+      state.data.push({
+        id: todo[key].id,
+        hexCode: todo[key].hexCode,
+        svgName: todo[key].svgName,
+        text: todo[key].text || '',
+        time: todo[key].time || { h: '00', m: '00' },
+      });
+    }
+    const lastIndex = state.data.length - 1;
+    state.id = state.data[lastIndex].id + 1;
   },
   setData(state, payload) {
     const data = {
@@ -81,18 +84,32 @@ export const mutations = {
       state.data.splice(indices[i], 1);
     }
   },
-  createNewData(state, id) {
-    console.log('Mutations::createNewData');
-    state.currentDataKeyName = id;
-    state.id= 0;
+  switchToDo(state, payload) {
+    console.log('Mutations::switchToDo');
+    state.currentDataKeyName = payload.key;
+    state.id = 0;
     state.data = [];
+    console.log('Mutations::end switchToDo');
   }
 }
 
 export const actions = {
-  async createNewData(context) {
-    const id = await fb.addNewDoc('todoItem', 'devUser1', 'data');
-    context.commit('createNewData', id);
-  }
+  async createNewData(context, payload) {
+    console.log('actions::createNewDate');
+    const key = await fb.addNewDoc('todoItem', 'devUser1', 'data', payload.todoname);
+    context.commit('switchToDo', { key });
+  },
+  async getTodo(context, payload) {
+    console.log('actions::getTodo');
+    const todo = await fb.getStoreData('todoItem','devUser1', 'data', payload.uid);
+    if (todo) context.commit('init' ,{ todo });
+  },
 }
+
+export const getters = {
+  uid(state) {
+    console.log('getters');
+    return state.currentDataKeyName;
+  },
+};
 

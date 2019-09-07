@@ -41,7 +41,7 @@ export default class {
     delData[key] = (() => firebase.firestore.FieldValue.delete())();
     await docRef.update(delData).catch((err) => console.log("Error delete field: ", err));
   }
-  async addNewDoc(collection ,docName, subCollection) {
+  async addNewDoc(collection ,docName, subCollection, todoname) {
     let docRef = await firebase.firestore().collection(collection).doc(docName)
       .collection(subCollection);
     const newDoc = await docRef.add({});
@@ -49,8 +49,8 @@ export default class {
     docRef = await firebase.firestore().collection('todoItem').doc('devUser1');
     await docRef.update({
       list: firebase.firestore.FieldValue.arrayUnion({
-        name: '新規作成リスト',
-        valur: newDoc.id,
+        name: todoname,
+        value: newDoc.id,
       })
     }).catch((err) => console.log("Error adding document: ", err));
     return newDoc.id;
