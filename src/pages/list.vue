@@ -3,7 +3,8 @@
     <app-loadding :isHide="isUser"/>
     <section class="list__section">
       <ul class="list__todoNames">
-        <li class="list__todoName"
+        <li
+          :class="`list__todoName${currentDataKeyName === datum.value ? ' is-actived': '' }`"
           v-for="(datum, index) of data"
           :key="index"
           :data-id="datum.value"
@@ -34,6 +35,9 @@ export default {
   },
 
   computed: {
+    ...mapState('todo-item', [
+      'currentDataKeyName'
+    ]),
     ...mapState('list', [
       'data'
     ]),
@@ -62,8 +66,10 @@ export default {
       this.$store.dispatch('list/getList');
     },
     switchToDo(e) {
+      console.log(e.target.innerText);
       this.$store.commit('todo-item/switchToDo', {
         key: e.target.dataset.id,
+        name: e.target.innerText,
       });
       console.log('component::end switchToDo');
       const uid = this.$store.getters['todo-item/uid'];
@@ -101,6 +107,7 @@ export default {
     }
     &.is-actived {
       background: $app-color;
+      color: #fff;
     }
   }
 }

@@ -4,6 +4,7 @@ const fb = new FirebaseQuery();
 export const state = () => ({
   id: 0,
   currentDataKeyName: 'plan1',
+  currentTodoname: '日本一周',
   data: [],
   isDeletable: false,
   deletionIds: [],
@@ -12,6 +13,7 @@ export const state = () => ({
 export const mutations = {
   init(state, payload) {
     const { todo } = payload;
+    console.log(todo);
     for (const key of Object.keys(todo)) {
       state.data.push({
         id: todo[key].id,
@@ -21,8 +23,10 @@ export const mutations = {
         time: todo[key].time || { h: '00', m: '00' },
       });
     }
-    const lastIndex = state.data.length - 1;
-    state.id = state.data[lastIndex].id + 1;
+    if (state.data.length) {
+      const lastIndex = state.data.length - 1;
+      state.id = state.data[lastIndex].id + 1;
+    }
   },
   setData(state, payload) {
     const data = {
@@ -87,6 +91,7 @@ export const mutations = {
   switchToDo(state, payload) {
     console.log('Mutations::switchToDo');
     state.currentDataKeyName = payload.key;
+    state.currentTodoname = payload.name;
     state.id = 0;
     state.data = [];
     console.log('Mutations::end switchToDo');
