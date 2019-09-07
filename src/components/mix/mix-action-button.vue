@@ -1,8 +1,8 @@
 <template>
   <div class="actionButton">
-    <div :class="`actionContent${isHide ? ' isHide': ''}`">
+    <div :class="`actionContent${actionContent.isHidden ? ' isHidden': ''}`">
       <ul class="actionContent__list">
-        <li class="actionContent__item" @click="createNewData">新規作成</li>
+        <li class="actionContent__item" @click="showPopup">新規作成</li>
         <li class="actionContent__item" @click="showModal">予定の追加</li>
         <li class="actionContent__item" @click="prepareDelete">予定の削除</li>
       </ul>
@@ -15,34 +15,44 @@
       :isShow="isDeletable"
       @click.native="confirmDelete"
     />
+    <mix-todoname-popup :isShown="isShown"/>
   </div>
 </template>
 
 <script>
 import AddButton from "~/components/simple/add-button";
+import AppButton from "~/components/simple/app-button";
 import DeleteButton from "~/components/simple/delete-button";
+import MixTodonamePopup from "~/components/mix/mix-todoname-popup";
 import { mapState } from 'vuex';
 
 export default {
   components: {
     AddButton,
-    DeleteButton
+    AppButton,
+    DeleteButton,
+    MixTodonamePopup
   },
   data() {
     return {
       isButtonState: false,
-      isHide: true,
+      actionContent: {
+        isHidden: true,
+      },
     };
   },
   computed: {
     ...mapState('todo-item', [
       'isDeletable'
+    ]),
+    ...mapState('mix-todoname-popup', [
+      'isShown'
     ])
   },
   methods: {
     toggleState: function() {
-      this.isHide = !this.isHide;
-      this.isButtonState = this.isHide === false;
+      this.actionContent.isHidden = !this.actionContent.isHidden;
+      this.isButtonState = this.actionContent.isHidden === false;
     },
     showModal: function() {
       this.toggleState();
@@ -57,28 +67,28 @@ export default {
       console.log('Delete');
       this.$store.commit('todo-item/deleteData');
     },
-    createNewData: function() {
-      this.$store.dispatch('todo-item/createNewData');
+    showPopup() {
+      this.$store.commit('mix-todoname-popup/show');
     }
   },
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .actionContent {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    z-index: 80;
-    width: 100%;
-    height: $app-footer-height;
-    background-color: $app-color;
-    transform: translate(0, 0);
-    transition: .3s;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 80;
+  width: 100%;
+  height: $app-footer-height;
+  background-color: $app-color;
+  transform: translate(0, 0);
+  transition: .3s;
 
-    &.isHide {
-      transform: translate(0, $app-footer-height);
-    }
+  &.isHidden {
+    transform: translate(0, $app-footer-height);
+  }
 
   &__list {
     display: flex;
