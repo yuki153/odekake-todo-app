@@ -94,8 +94,9 @@ export const mutations = {
 }
 
 export const actions = {
-  async createNewData(context) {
-    const key = await fb.addNewDoc('todoItem', 'devUser1', 'data');
+  async createNewData(context, payload) {
+    console.log('actions::createNewDate');
+    const key = await fb.addNewDoc('todoItem', 'devUser1', 'data', payload.todoname);
     context.commit('switchToDo', { key });
   },
   async getTodo(context, payload) {
