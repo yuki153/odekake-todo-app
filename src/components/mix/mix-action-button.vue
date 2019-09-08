@@ -69,6 +69,7 @@ export default {
       this.$store.commit('todo-item/deleteData', {uid});
     },
     showPopup() {
+      this.toggleState();
       this.$store.commit('mix-todoname-popup/show');
     }
   },
