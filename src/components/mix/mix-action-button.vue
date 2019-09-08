@@ -65,7 +65,8 @@ export default {
     },
     confirmDelete: function() {
       console.log('Delete');
-      this.$store.commit('todo-item/deleteData');
+      const uid = this.$store.getters['user/uid'];
+      this.$store.commit('todo-item/deleteData', {uid});
     },
     showPopup() {
       this.$store.commit('mix-todoname-popup/show');

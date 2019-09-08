@@ -140,7 +140,7 @@ export default {
       if (value) this.setTodoMin(value);
     },
     setDataInTodoItem(todo) {
-      const payload = {
+      const todoData = {
         text: todo.text,
         hexCode: todo.hexCode,
         svgName: todo.svgName,
@@ -149,12 +149,13 @@ export default {
           m: todo.time.min,
         }
       };
-      this.$store.commit("todo-item/setData", payload);
+      const uid = this.$store.getters['user/uid'];
+      this.$store.commit("todo-item/setData", {todoData, uid});
       this.reset();
       this.$store.commit("modal-screen/disableState");
     },
     updateDataInTodoItem(todo) {
-      const payload = {
+      const todoData = {
         id: todo.id,
         text: todo.text,
         hexCode: todo.hexCode,
@@ -164,7 +165,8 @@ export default {
           m: todo.time.min,
         }
       };
-      this.$store.commit('todo-item/updateData', payload)
+      const uid = this.$store.getters['user/uid'];
+      this.$store.commit('todo-item/updateData', {todoData, uid})
       this.reset();
       this.$store.commit("modal-screen/disableState");
     },
