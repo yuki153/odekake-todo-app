@@ -15,6 +15,20 @@ export default class {
       });
     });
   }
+  async createNewUser(collection, docName) {
+    const docRef = await firebase.firestore().collection(collection);
+    console.log(docRef);
+    await docRef.doc(docName).set({
+      list: [{
+        name: 'ExampleTODO',
+        value: 'example',
+      }]
+    });
+    await docRef.doc(docName).collection('data').doc('example').set({}).catch((err) => {
+      console.log('ERROR::createNewUser');
+      console.log(err);
+    });
+  }
   async getStoreData(collection ,docName, subCollection, subDocName) {
     const docRef = await firebase.firestore().collection(collection).doc(docName)
       .collection(subCollection).doc(subDocName);
@@ -46,7 +60,7 @@ export default class {
       .collection(subCollection);
     const newDoc = await docRef.add({});
     console.log(newDoc);
-    docRef = await firebase.firestore().collection('todoItem').doc('devUser1');
+    docRef = await firebase.firestore().collection('todoItem').doc(docName);
     await docRef.update({
       list: firebase.firestore.FieldValue.arrayUnion({
         name: todoname,
