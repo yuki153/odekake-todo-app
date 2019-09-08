@@ -92,6 +92,7 @@ export const mutations = {
   },
   switchToDo(state, payload) {
     console.log('Mutations::switchToDo');
+    console.log(payload);
     state.currentDataKeyName = payload.key;
     state.currentTodoname = payload.name;
     state.id = 0;
@@ -104,7 +105,7 @@ export const actions = {
   async createNewData(context, payload) {
     console.log('actions::createNewData');
     const key = await fb.addNewDoc('todoItem', payload.uid, 'data', payload.todoname);
-    context.commit('switchToDo', { key });
+    context.commit('switchToDo', { key, name: payload.todoname });
   },
   async getTodo(context, payload) {
     console.log('actions::getTodo');
