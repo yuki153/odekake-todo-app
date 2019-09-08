@@ -76,7 +76,7 @@ export default {
       });
       console.log('component::end switchToDo');
       const docId = this.$store.getters['todo-item/docId'];
-      this.$store.dispatch('todo-item/getTodo', { docId });
+      this.$store.dispatch('todo-item/getTodo', { docId, uid: this.uid });
     }
   },
 };
