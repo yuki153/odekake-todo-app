@@ -49,17 +49,13 @@ export default {
   mounted() {
     // google からのログイン情報取得が遅く、null になる
     // console.log(firebase.auth().currentUser, 'current');
-    console.log('mounted');
+    // console.log('mounted');
     firebase.auth().onAuthStateChanged(result => {
       if (result) {
-          this.$store.dispatch({
-            type: 'user/setUser',
-            bool: true
-          });
           return this.$router.push('/');
       } else {
         this.isLoginChecked = true;
-        console.log('ログイン情報なし');
+        // console.log('ログイン情報なし');
       }
     });
     firebase.auth().getRedirectResult().then(
