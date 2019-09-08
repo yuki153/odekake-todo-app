@@ -42,7 +42,8 @@ export default {
       'data'
     ]),
     ...mapState('user', [
-      'isUser'
+      'isUser',
+      'uid'
     ]),
   },
 
@@ -51,7 +52,9 @@ export default {
     if (!this.isUser) {
       firebase.auth().onAuthStateChanged((result) => {
         if (result) {
+          console.log(result);
           this.$store.commit('user/setUser', { bool: true });
+          this.$store.commit('user/setUid', { uid: result.uid });
           this.init();
         } else {
           this.$router.push("/sign-in");
@@ -63,7 +66,7 @@ export default {
   },
   methods: {
     init() {
-      this.$store.dispatch('list/getList');
+      this.$store.dispatch('list/getList', { uid: this.uid });
     },
     switchToDo(e) {
       console.log(e.target.innerText);
@@ -72,8 +75,8 @@ export default {
         name: e.target.innerText,
       });
       console.log('component::end switchToDo');
-      const uid = this.$store.getters['todo-item/uid'];
-      this.$store.dispatch('todo-item/getTodo', { uid });
+      const docId = this.$store.getters['todo-item/docId'];
+      this.$store.dispatch('todo-item/getTodo', { docId });
     }
   },
 };

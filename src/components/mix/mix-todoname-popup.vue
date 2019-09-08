@@ -29,7 +29,11 @@ export default {
   methods: {
     createNewData() {
       if (this.todoname) {
-        this.$store.dispatch('todo-item/createNewData', {todoname: this.todoname});
+        const uid = this.$store.getters['user/uid'];
+        this.$store.dispatch('todo-item/createNewData', {
+          todoname: this.todoname,
+          uid,
+        });
         this.close();
       }
     },

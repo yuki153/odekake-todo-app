@@ -40,11 +40,15 @@ export default {
     console.log('mounted::index');
     if (!this.isUser) {
       const user = await fb.getAuthState();
-      console.log(user)
+      console.log(user.uid)
       if (user) {
         this.user = user;
         this.$store.commit('user/setUser', { bool: true });
-        this.$store.dispatch('todo-item/getTodo', { uid: 'plan1' });
+        this.$store.commit('user/setUid', { uid: user.uid });
+        this.$store.dispatch('todo-item/getTodo', {
+          uid: user.uid,
+          docId: 'example',
+        });
       } else {
         this.$router.push("/sign-in");
       }
