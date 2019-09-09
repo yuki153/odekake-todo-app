@@ -95,7 +95,6 @@ export default {
     }),
   },
   mounted() {
-    console.log('mounted::mix-modal-screen');
   },
   methods: {
     ...mapMutations('mix-modal-screen', [

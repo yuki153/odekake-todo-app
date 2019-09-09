@@ -14,7 +14,7 @@ export const mutations = {
 
 export const getters = {
   isUser(state) {
-    console.log('getters');
+    // console.log('getters');
     return state.isUser; //!!Object.keys(state.user).length;
   },
   uid(state) {

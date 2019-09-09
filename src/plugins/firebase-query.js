@@ -7,7 +7,7 @@ export default class {
     return new Promise((resolve) => {
       firebase.auth().onAuthStateChanged((result) => {
         if (result) {
-          console.log(result);
+          // console.log(result);
           resolve(result);
         } else {
           resolve(false);
@@ -17,7 +17,7 @@ export default class {
   }
   async createNewUser(collection, docName) {
     const docRef = await firebase.firestore().collection(collection);
-    console.log(docRef);
+    // console.log(docRef);
     await docRef.doc(docName).set({
       list: [{
         name: 'ExampleTODO',
@@ -25,8 +25,8 @@ export default class {
       }]
     });
     await docRef.doc(docName).collection('data').doc('example').set({}).catch((err) => {
-      console.log('ERROR::createNewUser');
-      console.log(err);
+      // console.log('ERROR::createNewUser');
+      // console.log(err);
     });
   }
   async getStoreData(collection ,docName, subCollection, subDocName) {
@@ -39,13 +39,13 @@ export default class {
     const docRef = await firebase.firestore().collection(collection).doc(docName)
       .collection(subCollection).doc(subDocName);
     await docRef.update(field).catch((err) => console.log(err));
-    await console.log('update success');
+    // await console.log('update success');
   }
   async setStoreData(collection ,docName, subCollection, subDocName, data) {
     const docRef = await firebase.firestore().collection(collection).doc(docName)
       .collection(subCollection).doc(subDocName);
     await docRef.set(data, {merge: true}).catch((err) => console.log("Error adding document: ", err));
-    await console.log("Document written with ID: ", docRef.id);
+    // await console.log("Document written with ID: ", docRef.id);
   }
   async delStoreData(collection ,docName, subCollection, subDocName, fieldName) {
     const docRef = await firebase.firestore().collection(collection).doc(docName)
@@ -59,7 +59,7 @@ export default class {
     let docRef = await firebase.firestore().collection(collection).doc(docName)
       .collection(subCollection);
     const newDoc = await docRef.add({});
-    console.log(newDoc);
+    // console.log(newDoc);
     docRef = await firebase.firestore().collection('todoItem').doc(docName);
     await docRef.update({
       list: firebase.firestore.FieldValue.arrayUnion({

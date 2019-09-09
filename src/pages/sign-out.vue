@@ -32,7 +32,7 @@ export default {
       alert('自動ログインの有効期限が切れました。\nもう一度ログインし直してください');
       this.$router.push('/sign-in');
     } else {
-      // console.log(firebase.auth().currentUser);
+      // // console.log(firebase.auth().currentUser);
     }
   },
   methods: {

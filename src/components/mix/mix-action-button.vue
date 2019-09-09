@@ -64,7 +64,6 @@ export default {
       this.$store.commit('todo-item/isDeletable'); // true
     },
     confirmDelete: function() {
-      console.log('Delete');
       const uid = this.$store.getters['user/uid'];
       this.$store.commit('todo-item/deleteData', {uid});
     },

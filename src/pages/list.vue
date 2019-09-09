@@ -48,11 +48,11 @@ export default {
   },
 
   async mounted() {
-    console.log('PAGE::list');
+    // console.log('PAGE::list');
     if (!this.isUser) {
       firebase.auth().onAuthStateChanged((result) => {
         if (result) {
-          console.log(result);
+          // console.log(result);
           this.$store.commit('user/setUser', { bool: true });
           this.$store.commit('user/setUid', { uid: result.uid });
           this.init();
@@ -69,12 +69,12 @@ export default {
       this.$store.dispatch('list/getList', { uid: this.uid });
     },
     switchToDo(e) {
-      console.log(e.target.innerText);
+      // console.log(e.target.innerText);
       this.$store.commit('todo-item/switchToDo', {
         key: e.target.dataset.id,
         name: e.target.innerText,
       });
-      console.log('component::end switchToDo');
+      // console.log('component::end switchToDo');
       const docId = this.$store.getters['todo-item/docId'];
       this.$store.dispatch('todo-item/getTodo', { docId, uid: this.uid });
     }

@@ -13,7 +13,6 @@ export const state = () => ({
 export const mutations = {
   init(state, payload) {
     const { todo } = payload;
-    console.log(todo);
     for (const key of Object.keys(todo)) {
       state.data.push({
         id: todo[key].id,
@@ -49,7 +48,6 @@ export const mutations = {
     const items = state.data;
     for (let i = 0; i < itemLen; i++) {
       if (items[i].id == todoData.id) {
-        console.log(items[i]);
         items[i].text = todoData.text;
         items[i].time = todoData.time;
         items[i].hexCode = todoData.hexCode;
@@ -70,7 +68,6 @@ export const mutations = {
   removeDeletionIds(state, payload) {
     const idx = state.deletionIds.indexOf(payload.id);
     if (idx >= 0) state.deletionIds.splice(idx, 1);
-    console.log(state.deletionIds);
   },
   deleteData(state, payload) {
     state.isDeletable = false;
@@ -91,28 +88,21 @@ export const mutations = {
     }
   },
   switchToDo(state, payload) {
-    console.log('Mutations::switchToDo');
-    console.log(payload);
     state.currentDataKeyName = payload.key;
     state.currentTodoname = payload.name;
     state.id = 0;
     state.data = [];
-    console.log('Mutations::end switchToDo');
   }
 }
 
 export const actions = {
   async createNewData(context, payload) {
-    console.log('actions::createNewData');
     const key = await fb.addNewDoc('todoItem', payload.uid, 'data', payload.todoname);
     context.commit('switchToDo', { key, name: payload.todoname });
   },
   async getTodo(context, payload) {
-    console.log('actions::getTodo');
     const todo = await fb.getStoreData('todoItem',payload.uid, 'data', payload.docId);
-    console.log(todo);
     if (todo) {
-      console.log('Exist a user data in db');
       context.commit('init' ,{ todo });
     } else {
       await fb.createNewUser('todoItem', payload.uid);
@@ -122,7 +112,6 @@ export const actions = {
 
 export const getters = {
   docId(state) {
-    console.log('getters');
     return state.currentDataKeyName;
   },
 };
