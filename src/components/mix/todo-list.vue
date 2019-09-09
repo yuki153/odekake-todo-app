@@ -40,19 +40,17 @@ export default {
     toggleCheckmark: function(e) {
       e.target.classList.toggle('isChecked');
       if (e.target.classList.contains('isChecked')) {
-        console.log(`commit addDeletionIds:${e.target.dataset.id}`);
         this.$store.commit('todo-item/addDeletionIds', {
           id: e.target.dataset.id
         });
       } else {
-        console.log(`commit removeDeletionIds:${e.target.dataset.id}`);
         this.$store.commit('todo-item/removeDeletionIds', {
           id: e.target.dataset.id
         });
       }
     },
     showModal: function(datum) {
-      console.log(datum);
+      // console.log(datum);
       this.$store.commit('mix-modal-screen/update', {
         svgName: datum.svgName,
         hexCode: datum.hexCode,

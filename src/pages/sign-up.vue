@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     signUp: function() {
-      console.log("signup");
+      // console.log("signup");
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)

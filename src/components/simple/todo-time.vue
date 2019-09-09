@@ -100,12 +100,12 @@ export default {
   },
   watch: {
     min: function (val, oldVal) {
-      console.log(val);
+      // console.log(val);
       this.setTime();
     }
   },
   mounted() {
-    console.log('mounted::todo-time');
+    // console.log('mounted::todo-time');
     this.setTime();
   },
   methods: {
@@ -131,11 +131,11 @@ export default {
       }
     },
     updateHour(e) {
-      console.log(e.target.value);
+      // console.log(e.target.value);
       this.$emit('emitHour', e.target.value);
     },
     updateMin(e) {
-      console.log(e.target.value);
+      // console.log(e.target.value);
       this.$emit('emitMin', e.target.value);
     }
   }

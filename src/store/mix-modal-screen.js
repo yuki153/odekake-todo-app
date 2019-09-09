@@ -20,7 +20,7 @@ export const mutations = {
     state.isSelected = false;
   },
   update(state, payload) {
-    console.log('UPDATE.STORE');
+    // console.log('UPDATE.STORE');
     state.isUpdate = true;
     state.isSelected = true;
     state.todo.svgName = payload.svgName;
@@ -40,11 +40,11 @@ export const mutations = {
     state.todo.text = '';
   },
   backToIconSelect(state) {
-    console.log('back to icon select');
+    // console.log('back to icon select');
     state.isSelected = false;
   },
   goToIconInfo(state) {
-    console.log('Go to icon info');
+    // console.log('Go to icon info');
     state.isSelected = true;
   },
   setTodoText(state, text) {

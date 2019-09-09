@@ -37,10 +37,10 @@ export default {
     };
   },
   async mounted() {
-    console.log('mounted::index');
+    // console.log('mounted::index');
     if (!this.isUser) {
       const user = await fb.getAuthState();
-      console.log(user.uid)
+      // console.log(user.uid)
       if (user) {
         this.user = user;
         this.$store.commit('user/setUser', { bool: true });

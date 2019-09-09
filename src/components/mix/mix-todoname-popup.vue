@@ -38,7 +38,6 @@ export default {
       }
     },
     close() {
-      console.log('mix-todoname-popup hide');
       this.todoname = '';
       this.$store.commit('mix-todoname-popup/hide');
     }
