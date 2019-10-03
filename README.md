@@ -1,6 +1,8 @@
-# Travel-plan-application
+# ODEKAKE TODO
 
-## 概要
+## 動作環境
+
+* node v8.13.0
 
 ## 開発準備
 
@@ -37,5 +39,11 @@
   yarn serve
 
 # functions/ の index.ts をコンパイル後、firebase へデプロイ
-  firebase deploy --proejct <firebase-project-id>
+  firebase deploy --project <firebase-project-id>
 ```
+
+## その他
+
+* node v8.16 だと `fsevents.watch is not a function` でERRORとなり起動しない
+* node v8.11.4 だと `yarn dev` コマンドなどは動作するが、 `@nuxt/pwa` の install でつまづく
+* node v8.13.0 で完全な動作確認
