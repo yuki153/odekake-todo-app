@@ -21,12 +21,14 @@ const nuxt = new Nuxt({
 });
 
 function handleRequest(req: any, res: any) {
-    res.set('Cache-Control', 'public, max-age=600, s-maxage=1200');
-    return new Promise((resolve, reject) => {
+  res.set('Cache-Control', 'public, max-age=600, s-maxage=1200');
+  return new Promise((resolve, reject) => {
+      nuxt.ready().then(() => {
         nuxt.render(req, res, (promise: any) => {
-            promise.then(resolve).catch(reject);
+          promise.then(resolve).catch(reject);
         });
-    });
+      });
+  });
 }
 
 app.use(handleRequest);

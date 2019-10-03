@@ -1,66 +1,71 @@
 <template>
-  <section class="container">
-    <div v-if="isLogin">
-      <h1>HelloWorld</h1>
-    </div>
-  </section>
+  <div class="main">
+    <app-loadding :isHide="isUser"/>
+    <section class="main__section">
+      <todo-list/>
+      <mix-modal-screen/>
+      <mix-action-button/>
+    </section>
+  </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+import FirebaseQuery from "~/plugins/firebase-query.js";
+import AppLoadding from '~/components/simple/app-loading';
+import MixActionButton from '~/components/mix/mix-action-button';
+import MixModalScreen from '~/components/mix/mix-modal-screen';
+import TodoList from '~/components/mix/todo-list';
+import { mapState } from 'vuex';
+const fb = new FirebaseQuery();
 
 export default {
+  layout: 'default',
   components: {
-    Logo
+    AppLoadding,
+    MixActionButton,
+    MixModalScreen,
+    TodoList,
+  },
+  computed: {
+    ...mapState('user', [
+      'isUser'
+    ]),
   },
   data() {
     return {
-      isLogin: this.$store.getters.isLogin,
-      user: this.$store.state.user,
+      user: {}
+    };
+  },
+  async mounted() {
+    // console.log('mounted::index');
+    if (!this.isUser) {
+      const user = await fb.getAuthState();
+      // console.log(user.uid)
+      if (user) {
+        this.user = user;
+        this.$store.commit('user/setUser', { bool: true });
+        this.$store.commit('user/setUid', { uid: user.uid });
+        this.$store.dispatch('todo-item/getTodo', {
+          uid: user.uid,
+          docId: 'example',
+        });
+      } else {
+        this.$router.push("/sign-in");
+      }
     }
   },
-  mounted() {
-    if (!this.isLogin) {
-      alert('自動ログインの有効期限が切れました。\nもう一度ログインし直してください');
-      this.$router.push('/sign-in');
-    } else {
-      console.log(this.$store.state.user);
-      console.log(this.isLogin);
-      console.log(this.user.email);
-    }
-  }
-}
+};
 </script>
 
-<style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
+<style lang="scss" scoped>
+.main {
+  &__section {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    height: calc(100vh - (#{$app-header-height + $app-footer-height}));
+    padding: 16px 16px 0;
+  }
 }
 </style>
