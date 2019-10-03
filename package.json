@@ -1,5 +1,5 @@
 {
-  "name": "travel-plan-application",
+  "name": "odekake-todo",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/honjio/Travel-plan-application.git",
@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "setup": "cd src && yarn install && cd ../ && cd functions && yarn install && cd ../",
-    "build": "rm -rf public/* && npm --prefix src run build && cp -R functions/nuxt/dist/ public/assets && cp -R src/static/* public",
+    "build": "rm -rf public/* && npm --prefix src run build && cp -R functions/nuxt/dist/client/ public/assets && cp -R src/static/* public",
     "serve": "npm run build && npm --prefix functions run build && firebase serve --only functions,hosting"
   }
 }

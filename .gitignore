@@ -86,5 +86,7 @@ sw.*
 #firebase
 .firebase/
 public/assets/
+public/*.png
+public/*.gif
 functions/lib/
 functions/nuxt/
