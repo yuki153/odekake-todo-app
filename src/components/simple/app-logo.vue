@@ -21,7 +21,7 @@ $logoSize2: 136px;
     transform: translate(-50%, -50%);
     height: 70%;
     width: 70%;
-    background-color: $app-color;
+    background: url('/icon-192x192.png') $app-color center / contain;
     border-radius: 8px;
   }
 }

@@ -57,7 +57,7 @@ export default {
 
 <style lang="scss" scoped>
 .signup {
-
+  width: 100%;
   &__section {
     display: flex;
     flex-flow: column nowrap;

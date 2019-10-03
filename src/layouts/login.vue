@@ -3,7 +3,9 @@
     <header>
       <h1>{{isSignIn ? 'ログイン画面' : '新規アカウント登録'}}</h1>
     </header>
-    <nuxt />
+    <main :class="`${isPwa ? 'odekake is-pwa' : 'odekake'}`">
+      <nuxt/>
+    </main>
     <ul :class="`loginMenu${isHide ? ' isHide' : ''}`">
       <li :class="`loginMenu__item${isSignIn ? ' isSelected' : ''}`"><n-link to="/sign-in">ログイン画面</n-link></li>
       <li :class="`loginMenu__item${isSignIn ? '' : ' isSelected'}`"><n-link to="/sign-up">新規登録</n-link></li>
@@ -16,6 +18,7 @@ export default {
   data() {
     return {
       isHide: false,
+      isPwa: false,
     }
   },
   computed: {
@@ -24,6 +27,7 @@ export default {
     }
   },
   mounted() {
+    if (window.location.hash === '#pwa') this.isPwa = true;
     this.$el.addEventListener('DOMFocusIn', (e) => {
       if (e.target.tagName === 'INPUT') {
         this.isHide = true;
@@ -40,6 +44,9 @@ export default {
 
 <style lang="scss" scoped>
 header {
+  position:absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 40px;
   background-color: $app-color;
@@ -48,6 +55,18 @@ header {
     font-size: 14px;
     line-height: 40px;
     text-align: center;
+  }
+}
+
+.odekake {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100vh;
+  padding-top: 40px;
+  &.is-pwa {
+    align-items: center;
+    padding: 0 0 10vh 0;
   }
 }
 
