@@ -1,17 +1,18 @@
 {
-  "name": "travel-plan-application",
+  "name": "odekake-todo",
   "version": "1.0.0",
-  "description": "My Nuxt.js project",
+  "description": "odekake todo pwa project",
   "author": "fujino-yuki",
   "private": true,
   "scripts": {
     "dev": "nuxt",
-    "build": "nuxt build && cp -R .nuxt ../functions/nuxt",
+    "build": "nuxt build && cp -R .nuxt/ ../functions/nuxt",
     "start": "nuxt start",
     "generate": "nuxt generate"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.5.4",
+    "@nuxtjs/pwa": "^3.0.0-beta.19",
     "@nuxtjs/style-resources": "^0.1.2",
     "cross-env": "^5.2.0",
     "firebase": "^6.3.0",
