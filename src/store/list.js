@@ -7,8 +7,10 @@ export const state = () => ({
 export const mutations = {
   setList(state, data) {
     // console.log('MUTATIONS::setList');
-    // console.log(data);
     state.data = data;
+  },
+  appendList(state, data) {
+    state.data.push(data)
   }
 }
 

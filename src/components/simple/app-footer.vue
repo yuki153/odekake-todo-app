@@ -1,9 +1,15 @@
 <template>
   <footer class="appFooter">
-    <ul class="appFooter__items">
-      <li class="appFooter__item"><n-link to="/">計画内容</n-link></li>
-      <li class="appFooter__item"><n-link to="/list">計画一覧</n-link></li>
-      <li class="appFooter__item"><n-link to="/sign-out">ログアウト</n-link></li>
+    <ul :class="`appFooter__items ${currentPage}`">
+      <li :class="`appFooter__item${isTop ? ' is-selected' : '' }`">
+        <n-link to="/">計画内容</n-link>
+      </li>
+      <li :class="`appFooter__item${isList ? ' is-selected' : '' }`">
+        <n-link to="/list">計画一覧</n-link>
+      </li>
+      <li :class="`appFooter__item${isSignout ? ' is-selected' : '' }`">
+        <n-link to="/sign-out">ログアウト</n-link>
+      </li>
     </ul>
   </footer>
 </template>
@@ -15,29 +21,42 @@ export default {
       this.addStateClass(to);
     }
   },
+  data() {
+    return {
+      isTop: true,
+      isList: false,
+      isSignout: false,
+      currentPage: 'is-top',
+    }
+  },
+  mounted() {
+    this.addStateClass(this.$route);
+  },
   methods: {
     addStateClass: function(path) {
-      const items = this.$el.querySelectorAll('.appFooter__item');
-      for (const item of items) {
-        item.classList.remove('isSelected');
-      }
       switch(path.name) {
         case 'index':
-          items[0].classList.add('isSelected');
+          this.isTop = true;
+          this.isList = false;
+          this.isSignout = false;
+          this.currentPage = 'is-top';
           break
         case 'list':
-          items[1].classList.add('isSelected');
+          this.isTop = false;
+          this.isList = true;
+          this.isSignout = false;
+          this.currentPage = 'is-list';
           break
         case 'sign-out':
-          items[2].classList.add('isSelected');
+          this.isTop = false;
+          this.isList = false;
+          this.isSignout = true;
+          this.currentPage = 'is-signout';
           break
         default:
           break
       }
     }
-  },
-  mounted() {
-    this.addStateClass(this.$route);
   }
 }
 </script>
@@ -55,16 +74,36 @@ export default {
   box-shadow: #ccc 0 0 8px 2px;
 
   &__items {
+    position: relative;
     display: flex;
     list-style: none;
     height: 100%;
+    &::after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 33.3%;
+      height: 3px;
+      background-color: $app-color;
+      transition: .2s transform ease;
+      content: '';
+    }
+    &.is-top::after {
+      transform: translate(0);
+    }
+    &.is-list::after {
+      transform: translate(100%);
+    }
+    &.is-signout::after {
+      transform: translate(200%);
+    }
   }
 
   &__item {
     flex: 1;
     height: 100%;
 
-    &.isSelected {
+    &.is-selected {
       color: $app-color;
     }
 

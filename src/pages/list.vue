@@ -11,32 +11,47 @@
           @click="switchToDo">{{ datum.name }}
         </li>
       </ul>
-      <add-button/>
     </section>
+    <mix-todoname-popup :isShown="mixTodonamePopup.isShown"/>
+    <mix-action-controllers
+      :buttons="{add: true, del: false}"
+      :actions="[
+        { name: '計画の新規作成', event: showPopup },
+        { name: '計画の削除', event:'' },
+        { name: '計画の名前変更', event:'' }
+      ]"
+    />
   </div>
 </template>
 
 <script>
 import firebase from "~/plugins/firebase";
 import AppLoadding from '~/components/simple/app-loading';
-import AddButton from '~/components/simple/add-button';
+import MixActionControllers from '~/components/mix/mix-action-controllers';
+import MixTodonamePopup from '~/components/mix/mix-todoname-popup';
 import { mapState } from 'vuex';
 
 export default {
   layout: "default",
   components: {
     AppLoadding,
-    AddButton
+    MixActionControllers,
+    MixTodonamePopup
   },
   data() {
     return {
       user: {}
     };
   },
-
+  watch: {
+    currentTodoname (val, oldVal) {
+      setTimeout(() => this.$router.push('/'), 300);
+    }
+  },
   computed: {
     ...mapState('todo-item', [
-      'currentDataKeyName'
+      'currentDataKeyName',
+      'currentTodoname'
     ]),
     ...mapState('list', [
       'data'
@@ -45,6 +60,13 @@ export default {
       'isUser',
       'uid'
     ]),
+    ...mapState('mix-todoname-popup', {
+      mixTodonamePopup: (state) => {
+        return {
+          isShown: state.isShown,
+        }
+      }
+    })
   },
 
   async mounted() {
@@ -77,6 +99,9 @@ export default {
       // console.log('component::end switchToDo');
       const docId = this.$store.getters['todo-item/docId'];
       this.$store.dispatch('todo-item/getTodo', { docId, uid: this.uid });
+    },
+    showPopup() {
+      this.$store.commit('mix-todoname-popup/show');
     }
   },
 };
