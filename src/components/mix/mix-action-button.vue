@@ -4,7 +4,7 @@
       <ul class="actionContent__list">
         <li class="actionContent__item" @click="showModal">予定の追加</li>
         <li class="actionContent__item" @click="prepareDelete">予定の削除</li>
-        <li class="actionContent__item" @click="showPopup">予定リストの新規作成</li>
+        <li class="actionContent__item" @click="showPopup">計画の新規作成</li>
       </ul>
     </div>
     <add-button
