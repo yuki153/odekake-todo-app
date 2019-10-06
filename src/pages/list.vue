@@ -2,33 +2,45 @@
   <div class="list">
     <app-loadding :isHide="isUser"/>
     <section class="list__section">
-      <ul class="list__todoNames">
-        <li
-          :class="`list__todoName${currentDataKeyName === datum.value ? ' is-actived': '' }`"
+      <ul class="todoNameList">
+        <li class="todoNameList__item"
           v-for="(datum, index) of data"
-          :key="index"
+          :key="index">
+          <check-icon
+            v-if="isDeletable && currentDataKeyName !== datum.value"
+            :dataSetVal="JSON.stringify({
+              value: datum.value,
+              name: datum.name
+            })"
+            @emitCheckmark="setDeletionData"
+          />
+          <div
+          :class="`todoNameList__content${currentDataKeyName === datum.value ? ' is-actived': '' }`"
           :data-id="datum.value"
-          @click="switchToDo">{{ datum.name }}
+          @click="switchToDo">{{ datum.name }}</div>
         </li>
       </ul>
     </section>
     <mix-todoname-popup :isShown="mixTodonamePopup.isShown"/>
     <mix-action-controllers
-      :buttons="{add: true, del: false}"
+      :buttons="mixActionControllers.buttons"
       :actions="[
         { name: '計画の新規作成', event: showPopup },
-        { name: '計画の削除', event:'' },
-        { name: '計画の名前変更', event:'' }
+        { name: '計画の削除', event: prepareDelete },
+        // { name: '計画の名前変更', event:'' }
       ]"
+      :delAction="deleteList"
     />
   </div>
 </template>
 
 <script>
-import firebase from "~/plugins/firebase";
 import AppLoadding from '~/components/simple/app-loading';
+import checkIcon from '~/components/simple/check-icon';
 import MixActionControllers from '~/components/mix/mix-action-controllers';
 import MixTodonamePopup from '~/components/mix/mix-todoname-popup';
+import firebase from "~/plugins/firebase";
+import { showAlert } from "~/plugins/util";
 import { mapState } from 'vuex';
 
 export default {
@@ -36,11 +48,12 @@ export default {
   components: {
     AppLoadding,
     MixActionControllers,
-    MixTodonamePopup
+    MixTodonamePopup,
+    checkIcon
   },
   data() {
     return {
-      user: {}
+      user: {},
     };
   },
   watch: {
@@ -54,7 +67,9 @@ export default {
       'currentTodoname'
     ]),
     ...mapState('list', [
-      'data'
+      'data',
+      'isDeletable',
+      'deletionData'
     ]),
     ...mapState('user', [
       'isUser',
@@ -66,15 +81,20 @@ export default {
           isShown: state.isShown,
         }
       }
-    })
+    }),
+    ...mapState('mix-action-controllers', {
+      mixActionControllers: (state) => {
+        return {
+          buttons: state.buttons,
+          isActived: state.isActived,
+        }
+      }
+    }),
   },
-
   async mounted() {
-    // console.log('PAGE::list');
     if (!this.isUser) {
       firebase.auth().onAuthStateChanged((result) => {
         if (result) {
-          // console.log(result);
           this.$store.commit('user/setUser', { bool: true });
           this.$store.commit('user/setUid', { uid: result.uid });
           this.init();
@@ -91,17 +111,42 @@ export default {
       this.$store.dispatch('list/getList', { uid: this.uid });
     },
     switchToDo(e) {
-      // console.log(e.target.innerText);
-      this.$store.commit('todo-item/switchToDo', {
+      this.$store.commit('todo-item/setTodoState', {
         key: e.target.dataset.id,
         name: e.target.innerText,
       });
-      // console.log('component::end switchToDo');
       const docId = this.$store.getters['todo-item/docId'];
       this.$store.dispatch('todo-item/getTodo', { docId, uid: this.uid });
     },
     showPopup() {
       this.$store.commit('mix-todoname-popup/show');
+      this.$store.commit('mix-action-controllers/initializeState');
+    },
+    prepareDelete() {
+      if (this.data.length > 1) {
+        this.$store.commit('mix-action-controllers/enableDelbutton');
+        this.$store.commit('list/isDeletable');
+      } else {
+        showAlert('作成済みの計画が１件しかないため削除できません');
+      }
+    },
+    setDeletionData(data) {
+       const deletionList = JSON.parse(data.dataSetVal);
+      if (data.isChecked) {
+        this.$store.commit('list/appendDeletionData', deletionList);
+      } else {
+        const idx = this.deletionData.findIndex(item => item.value === deletionList.value);
+        this.$store.commit('list/removeDeletionData', idx);
+      }
+    },
+    async deleteList() {
+      await this.$store.dispatch('list/deleteList', {
+        uid: this.uid,
+        data: this.deletionData,
+      });
+      this.$store.commit('mix-action-controllers/initializeState');
+      this.$store.commit('list/resetDeletionData');
+      this.$store.commit('list/isDeletable');
     }
   },
 };
@@ -116,23 +161,31 @@ export default {
     align-items: center;
     height: calc(100vh - (#{$app-header-height + $app-footer-height}));
   }
-  &__todoNames {
-    width: 100%;
-    height: 100%;
-    padding: 16px;
-    list-style: none;
-  }
-  &__todoName {
+}
+
+.todoNameList {
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  list-style: none;
+  &__item {
+    display: flex;
     width: 100%;
     height: 44px;
+    & + .todoNameList__item {
+      margin-top: 8px;
+    }
+    & /deep/ .checkIcon {
+      min-width: 48px;
+      height: 100%;
+    }
+  }
+  &__content {
+    width: 100%;
     line-height: 44px;
     padding-left: 16px;
     box-sizing: border-box;
     background-color: #c4c4c4;
-    margin-bottom: 8px;
-    &:last-child {
-      margin-bottom: 0;
-    }
     &.is-actived {
       background: $app-color;
       color: #fff;
