@@ -1,5 +1,5 @@
 <template>
-  <div :class="`actionControllers${actionContent.isHidden ? ' isHidden': ''}`">
+  <div :class="`actionControllers${isActived ? '': ' isHidden'}`">
     <div class="actionContent">
       <ul class="actionContent__list">
         <li
@@ -13,7 +13,7 @@
     </div>
     <add-button
       :isShow="buttons.add"
-      :isActive="!actionContent.isHidden"
+      :isActive="isActived"
       @click.native="toggleState"/>
     <delete-button
       :isShow="buttons.del"
@@ -34,25 +34,17 @@ export default {
   },
   props: {
     actions: Array,
-    buttons: {
-      add: Boolean,
-      del: Boolean
-    },
     delAction: Function,
   },
-  data() {
-    return {
-      actionContent: {
-        isHidden: true,
-      },
-    };
-  },
-  mounted() {
-    console.log(this.index);
+  computed: {
+    ...mapState('mix-action-controllers', [
+      'isActived',
+      'buttons',
+    ]),
   },
   methods: {
-    toggleState: function() {
-      this.actionContent.isHidden = !this.actionContent.isHidden;
+    toggleState() {
+      this.$store.commit('mix-action-controllers/isActived');
     },
   },
 };
