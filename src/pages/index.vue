@@ -66,7 +66,7 @@ export default {
         });
         this.$store.dispatch('todo-item/getTodo', {
           uid: user.uid,
-          docId: this.listData ? this.listData[0].value : '',
+          docId: this.listData ? this.listData[0].value : 'example',
         });
       } else {
         this.$router.push("/sign-in");
