@@ -15,7 +15,6 @@
       :isShow="isDeletable"
       @click.native="confirmDelete"
     />
-    <mix-todoname-popup :isShown="isShown"/>
   </div>
 </template>
 
@@ -23,7 +22,6 @@
 import AddButton from "~/components/simple/add-button";
 import AppButton from "~/components/simple/app-button";
 import DeleteButton from "~/components/simple/delete-button";
-import MixTodonamePopup from "~/components/mix/mix-todoname-popup";
 import { mapState } from 'vuex';
 
 export default {
@@ -31,7 +29,6 @@ export default {
     AddButton,
     AppButton,
     DeleteButton,
-    MixTodonamePopup
   },
   data() {
     return {
@@ -45,9 +42,6 @@ export default {
     ...mapState('todo-item', [
       'isDeletable'
     ]),
-    ...mapState('mix-todoname-popup', [
-      'isShown'
-    ])
   },
   methods: {
     toggleState: function() {
