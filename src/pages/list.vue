@@ -108,15 +108,22 @@ export default {
   },
   methods: {
     init() {
+      if (this.isDeletable) {
+        this.$store.commit('mix-action-controllers/initializeState');
+        this.$store.commit('list/resetDeletionData');
+        this.$store.commit('list/isDeletable');
+      }
       this.$store.dispatch('list/getList', { uid: this.uid });
     },
     switchToDo(e) {
-      this.$store.commit('todo-item/setTodoState', {
-        key: e.target.dataset.id,
-        name: e.target.innerText,
-      });
-      const docId = this.$store.getters['todo-item/docId'];
-      this.$store.dispatch('todo-item/getTodo', { docId, uid: this.uid });
+      if (this.isDeletable === false) {
+        this.$store.commit('todo-item/setTodoState', {
+          key: e.target.dataset.id,
+          name: e.target.innerText,
+        });
+        const docId = this.$store.getters['todo-item/docId'];
+        this.$store.dispatch('todo-item/getTodo', { docId, uid: this.uid });
+      }
     },
     showPopup() {
       this.$store.commit('mix-todoname-popup/show');
