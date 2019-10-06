@@ -5,6 +5,7 @@
       <todo-list/>
       <mix-modal-screen/>
       <mix-action-button/>
+      <mix-todoname-popup :isShown="isShown"/>
     </section>
   </div>
 </template>
@@ -14,9 +15,10 @@ import FirebaseQuery from "~/plugins/firebase-query.js";
 import AppLoadding from '~/components/simple/app-loading';
 import MixActionButton from '~/components/mix/mix-action-button';
 import MixModalScreen from '~/components/mix/mix-modal-screen';
+import MixTodonamePopup from "~/components/mix/mix-todoname-popup";
 import TodoList from '~/components/mix/todo-list';
+import fb from "~/plugins/firebase";
 import { mapState } from 'vuex';
-const fb = new FirebaseQuery();
 
 export default {
   layout: 'default',
@@ -24,30 +26,47 @@ export default {
     AppLoadding,
     MixActionButton,
     MixModalScreen,
+    MixTodonamePopup,
     TodoList,
   },
   computed: {
     ...mapState('user', [
       'isUser'
     ]),
+    ...mapState('mix-todoname-popup', [
+      'isShown'
+    ]),
+    ...mapState('list', {
+      listData: (state) => state.data,
+    }),
   },
   data() {
     return {
       user: {}
     };
   },
+  methods: {
+    getAuthState() {
+      return new Promise((resolve) => {
+        fb.auth().onAuthStateChanged(result => result ? resolve(result) : resolve(false));
+      });
+    }
+  },
   async mounted() {
-    // console.log('mounted::index');
     if (!this.isUser) {
-      const user = await fb.getAuthState();
-      // console.log(user.uid)
+      const user = await this.getAuthState();
       if (user) {
+        await this.$store.dispatch('list/getList', { uid: user.uid });
         this.user = user;
         this.$store.commit('user/setUser', { bool: true });
         this.$store.commit('user/setUid', { uid: user.uid });
+        this.$store.commit('todo-item/setTodoState', {
+          key: this.listData ? this.listData[0].value : 'example',
+          name: this.listData ? this.listData[0].name : 'ExampleTODO',
+        });
         this.$store.dispatch('todo-item/getTodo', {
           uid: user.uid,
-          docId: 'example',
+          docId: this.listData ? this.listData[0].value : '',
         });
       } else {
         this.$router.push("/sign-in");
