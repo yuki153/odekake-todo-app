@@ -24,10 +24,11 @@ export default {
   align-items: center;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, .8);
+  background-color: rgba(0, 0, 0, .75);
   opacity: 1;
   z-index: 100;
-  transition: .3s,
+  transition: .3s;
+  backdrop-filter: blur(3px);
 }
 
 // modal (transionタグの効果)開始時の style
