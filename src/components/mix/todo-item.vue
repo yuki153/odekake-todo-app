@@ -46,7 +46,7 @@ export default {
     background-color: #fff;
     width: 100%;
     min-height: 56px;
-    font-size: 12px;
+    font-size: 14px;
     padding: 4px;
     border: 1px solid #c4c4c4;
     &:empty {

@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import AppButton from "~/components/simple/app-button";
 import ModalScreen from "~/components/simple/modal-screen";
 
@@ -26,13 +27,23 @@ export default {
   props: {
     isShown: Boolean,
   },
+  computed: {
+    ...mapState('todo-item', [
+      'currentDataKeyName',
+      'currentTodoname'
+    ]),
+  },
   methods: {
-    createNewData() {
+    async createNewData() {
       if (this.todoname) {
         const uid = this.$store.getters['user/uid'];
-        this.$store.dispatch('todo-item/createNewData', {
+        await this.$store.dispatch('todo-item/createNewData', {
           todoname: this.todoname,
           uid,
+        });
+        this.$store.commit('list/appendList', {
+          name: this.currentTodoname,
+          value: this.currentDataKeyName
         });
         this.close();
       }

@@ -3,8 +3,8 @@ const fb = new FirebaseQuery();
 
 export const state = () => ({
   id: 0,
-  currentDataKeyName: 'example',
-  currentTodoname: 'ExampleTODO',
+  currentDataKeyName: '',
+  currentTodoname: '',
   data: [],
   isDeletable: false,
   deletionIds: [],
@@ -87,7 +87,7 @@ export const mutations = {
       state.data.splice(indices[i], 1);
     }
   },
-  switchToDo(state, payload) {
+  setTodoState(state, payload) {
     state.currentDataKeyName = payload.key;
     state.currentTodoname = payload.name;
     state.id = 0;
@@ -98,7 +98,7 @@ export const mutations = {
 export const actions = {
   async createNewData(context, payload) {
     const key = await fb.addNewDoc('todoItem', payload.uid, 'data', payload.todoname);
-    context.commit('switchToDo', { key, name: payload.todoname });
+    context.commit('setTodoState', { key, name: payload.todoname });
   },
   async getTodo(context, payload) {
     const todo = await fb.getStoreData('todoItem',payload.uid, 'data', payload.docId);

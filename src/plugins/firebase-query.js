@@ -3,18 +3,6 @@ import firebase from "~/plugins/firebase";
 export default class {
   constructor() {
   }
-  async getAuthState() {
-    return new Promise((resolve) => {
-      firebase.auth().onAuthStateChanged((result) => {
-        if (result) {
-          // console.log(result);
-          resolve(result);
-        } else {
-          resolve(false);
-        }
-      });
-    });
-  }
   async createNewUser(collection, docName) {
     const docRef = await firebase.firestore().collection(collection);
     // console.log(docRef);
