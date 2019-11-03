@@ -1,4 +1,8 @@
 {
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
   "hosting": {
     "public": "public",
     "ignore": [
@@ -9,7 +13,7 @@
     "rewrites": [{
       "source": "**",
       "function": "ssrapp"
-    }]    
+    }]
   },
   "functions": {
     "predeploy": "npm --prefix functions run build"
