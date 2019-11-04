@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import firebase from "~/plugins/firebase";
+import fb from "~/plugins/firebase";
 import AppLogo from "~/components/simple/app-logo";
 import AppButton from '~/components/simple/app-button';
 
@@ -39,18 +39,14 @@ export default {
     }
   },
   methods: {
-    signUp: function() {
-      // console.log("signup");
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(this.email, this.password)
-        .then(user => {
-          alert("Successful account creation");
-        })
-        .catch(err => {
-          alert(err.message);
-        });
-    }
+    signUp: async function() {
+      try {
+        const result = await fb.auth().createUserWithEmailAndPassword(this.email, this.password);
+        await result.user.sendEmailVerification();
+      } catch (err) {
+        alert(err.message);
+      }
+    },
   }
 };
 </script>

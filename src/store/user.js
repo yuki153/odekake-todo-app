@@ -1,6 +1,7 @@
 export const state = () => ({
   isUser: false,
   uid: '',
+  emailVerified: false,
 });
 
 export const mutations = {
@@ -9,6 +10,9 @@ export const mutations = {
   },
   setUid(state, payload) {
     state.uid = payload.uid;
+  },
+  setEmailVerified(state, payload) {
+    state.emailVerified = payload.bool;
   }
 };
 
@@ -19,5 +23,8 @@ export const getters = {
   },
   uid(state) {
     return state.uid;
+  },
+  emailVerified(state) {
+    return state.emailVerified;
   }
 };

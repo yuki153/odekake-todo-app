@@ -1,6 +1,7 @@
 <template>
   <div class="list">
     <app-loadding :isHide="isUser"/>
+    <mix-lock-screen/>
     <section class="list__section">
       <ul class="todoNameList">
         <li class="todoNameList__item"
@@ -39,6 +40,7 @@ import AppLoadding from '~/components/simple/app-loading';
 import checkIcon from '~/components/simple/check-icon';
 import MixActionControllers from '~/components/mix/mix-action-controllers';
 import MixTodonamePopup from '~/components/mix/mix-todoname-popup';
+import MixLockScreen from '~/components/mix/mix-lock-screen';
 import firebase from "~/plugins/firebase";
 import { showAlert } from "~/plugins/util";
 import { mapState } from 'vuex';
@@ -49,7 +51,8 @@ export default {
     AppLoadding,
     MixActionControllers,
     MixTodonamePopup,
-    checkIcon
+    MixLockScreen,
+    checkIcon,
   },
   data() {
     return {
@@ -73,7 +76,8 @@ export default {
     ]),
     ...mapState('user', [
       'isUser',
-      'uid'
+      'uid',
+      'emailVerified'
     ]),
     ...mapState('mix-todoname-popup', {
       mixTodonamePopup: (state) => {
@@ -92,18 +96,21 @@ export default {
     }),
   },
   async mounted() {
-    if (!this.isUser) {
-      firebase.auth().onAuthStateChanged((result) => {
-        if (result) {
-          this.$store.commit('user/setUser', { bool: true });
-          this.$store.commit('user/setUid', { uid: result.uid });
-          this.init();
+    if (this.isUser && this.emailVerified) {
+      this.init();
+    } else {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user && user.emailVerified) {
+          user.getIdToken(true).then(() => { // token を強制リフレッシュしないと firestore のユーザーデータが更新されない
+            this.setUser(user);
+            this.init();
+          })
+        } else if (user) {
+          this.setUser(user);
         } else {
           this.$router.push("/sign-in");
         }
       });
-    } else {
-      this.init();
     }
   },
   methods: {
@@ -114,6 +121,11 @@ export default {
         this.$store.commit('list/isDeletable');
       }
       this.$store.dispatch('list/getList', { uid: this.uid });
+    },
+    setUser(user) {
+      this.$store.commit('user/setUser', { bool: true });
+      this.$store.commit('user/setUid', { uid: user.uid });
+      this.$store.commit('user/setEmailVerified', { bool: user.emailVerified });
     },
     switchToDo(e) {
       if (this.isDeletable === false) {
