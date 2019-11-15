@@ -27,6 +27,7 @@ export default {
   },
   methods: {
     pageReload() {
+      document.cookie = 'email_verified=true; max-age=86400; path=/';
       window.location.reload();
     }
   },

@@ -60,6 +60,11 @@ export default {
     if (!this.isUser) {
       const user = await this.getAuthState();
       if (user && user.emailVerified) {
+        if (/email_verified=true/.test(document.cookie)) {
+          // token を強制リフレッシュしないと firestore のユーザーデータが更新されない
+          await user.getIdToken(true);
+          document.cookie = 'email_verified=; max-age=0; path=/';
+        }
         await this.$store.dispatch('list/getList', { uid: user.uid });
         this.setUser(user);
         this.$store.commit('todo-item/setTodoState', {

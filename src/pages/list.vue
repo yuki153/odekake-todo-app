@@ -97,20 +97,23 @@ export default {
   },
   async mounted() {
     if (this.isUser && this.emailVerified) {
+      // TODO: リストページ始まりでアドレス確認を行うと、ロック画面解除後正しく動作しない
       this.init();
     } else {
-      firebase.auth().onAuthStateChanged((user) => {
-        if (user && user.emailVerified) {
-          user.getIdToken(true).then(() => { // token を強制リフレッシュしないと firestore のユーザーデータが更新されない
-            this.setUser(user);
-            this.init();
-          })
-        } else if (user) {
-          this.setUser(user);
-        } else {
-          this.$router.push("/sign-in");
+      const user = await this.getAuthState();
+      if (user && user.emailVerified) {
+        if (/email_verified=true/.test(document.cookie)) {
+          // token を強制リフレッシュしないと firestore のユーザーデータが更新されない
+          await user.getIdToken(true);
+          document.cookie = 'email_verified=; max-age=0; path=/';
         }
-      });
+        this.setUser(user);
+        this.init();
+      } else if (user) {
+        this.setUser(user);
+      } else {
+        this.$router.push("/sign-in");
+      }
     }
   },
   methods: {
@@ -121,6 +124,11 @@ export default {
         this.$store.commit('list/isDeletable');
       }
       this.$store.dispatch('list/getList', { uid: this.uid });
+    },
+    getAuthState() {
+      return new Promise((resolve) => {
+        firebase.auth().onAuthStateChanged(result => result ? resolve(result) : resolve(false));
+      });
     },
     setUser(user) {
       this.$store.commit('user/setUser', { bool: true });
@@ -150,7 +158,7 @@ export default {
       }
     },
     setDeletionData(data) {
-       const deletionList = JSON.parse(data.dataSetVal);
+      const deletionList = JSON.parse(data.dataSetVal);
       if (data.isChecked) {
         this.$store.commit('list/appendDeletionData', deletionList);
       } else {
