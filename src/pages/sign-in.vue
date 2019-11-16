@@ -18,10 +18,11 @@
 </template>
 
 <script>
-import firebase from '~/plugins/firebase';
+import fb from '~/plugins/firebase';
 import AppLogo from '~/components/simple/app-logo'
 import AppButton from '~/components/simple/app-button';
 import AppLoading from '~/components/simple/app-loading';
+import { mapState } from 'vuex';
 
 export default {
   components: {
@@ -38,46 +39,46 @@ export default {
     }
   },
   computed: {
-    validation: function() {
-      if (this.password && this.email) {
-        return true;
-      } else {
-        return false;
-      }
+    ...mapState('user', [
+      'isUser',
+    ]),
+    validation() {
+      return (this.password && this.email) ? true : false;
     }
   },
   mounted() {
-    // google からのログイン情報取得が遅く、null になる
-    // console.log(firebase.auth().currentUser, 'current');
-    // console.log('mounted');
-    firebase.auth().onAuthStateChanged(result => {
-      if (result) {
-          return this.$router.push('/');
-      } else {
-        this.isLoginChecked = true;
-        // console.log('ログイン情報なし');
-      }
-    });
-    firebase.auth().getRedirectResult().then(
-      result => {},
-      err => {
-        alert(err.message)
-      }
-    )
+    if (window.unsubscribe) window.unsubscribe();
+    if (this.isUser === false) {
+      window.unsubscribe = fb.auth().onAuthStateChanged(user => {
+        if (user) {
+          this.$store.commit('user/setUser', {
+            isUser: true,
+            uid: user.uid,
+            emailVerified: user.emailVerified
+          });
+          this.$router.push('/');
+        } else {
+          // ローティングを状態を解除する
+          this.isLoginChecked = true;
+        }
+      });
+    } else {
+      this.$router.push('/');
+    }
   },
   methods: {
-    signIn: function() {
-      firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
+    signIn() {
+      fb.auth().signInWithEmailAndPassword(this.email, this.password).then(
         result => {},
         err => {
           alert(err.message)
         }
       )
     },
-    signInByGoogle: function() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithRedirect(provider);
-    }
+    signInByGoogle() {
+      const provider = new fb.auth.GoogleAuthProvider();
+      fb.auth().signInWithRedirect(provider);
+    },
   }
 }
 </script>

@@ -1,6 +1,7 @@
 <template>
   <div class="list">
     <app-loadding :isHide="isUser"/>
+    <mix-lock-screen/>
     <section class="list__section">
       <ul class="todoNameList">
         <li class="todoNameList__item"
@@ -39,7 +40,8 @@ import AppLoadding from '~/components/simple/app-loading';
 import checkIcon from '~/components/simple/check-icon';
 import MixActionControllers from '~/components/mix/mix-action-controllers';
 import MixTodonamePopup from '~/components/mix/mix-todoname-popup';
-import firebase from "~/plugins/firebase";
+import MixLockScreen from '~/components/mix/mix-lock-screen';
+import fb from "~/plugins/firebase";
 import { showAlert } from "~/plugins/util";
 import { mapState } from 'vuex';
 
@@ -49,7 +51,8 @@ export default {
     AppLoadding,
     MixActionControllers,
     MixTodonamePopup,
-    checkIcon
+    MixLockScreen,
+    checkIcon,
   },
   data() {
     return {
@@ -73,7 +76,8 @@ export default {
     ]),
     ...mapState('user', [
       'isUser',
-      'uid'
+      'uid',
+      'emailVerified'
     ]),
     ...mapState('mix-todoname-popup', {
       mixTodonamePopup: (state) => {
@@ -92,18 +96,26 @@ export default {
     }),
   },
   async mounted() {
-    if (!this.isUser) {
-      firebase.auth().onAuthStateChanged((result) => {
-        if (result) {
-          this.$store.commit('user/setUser', { bool: true });
-          this.$store.commit('user/setUid', { uid: result.uid });
-          this.init();
-        } else {
-          this.$router.push("/sign-in");
-        }
-      });
-    } else {
+    if (window.unsubscribe) window.unsubscribe();
+    // Root(/)ページ経由でアクセスの場合（user 情報が既にセットされている）
+    if (this.isUser && this.emailVerified) {
       this.init();
+    // このページにダイレクトでアクセスの場合
+    } else {
+      const user = await this.getAuthState();
+      // ログイン済みかつ、メール認証済みの場合
+      if (user && user.emailVerified) {
+        this.$router.push("/");
+      // ログイン済みかつ、メール認証が済んでいない場合
+      } else if (user) {
+        this.$store.commit('user/setUser', {
+          isUser: true,
+          uid: user.uid,
+          emailVerified: user.emailVerified
+        });
+      } else {
+        this.$router.push("/sign-in");
+      }
     }
   },
   methods: {
@@ -114,6 +126,11 @@ export default {
         this.$store.commit('list/isDeletable');
       }
       this.$store.dispatch('list/getList', { uid: this.uid });
+    },
+    getAuthState() {
+      return new Promise((resolve) => {
+        window.unsubscribe = fb.auth().onAuthStateChanged(user => user ? resolve(user) : resolve(false));
+      });
     },
     switchToDo(e) {
       if (this.isDeletable === false) {
@@ -138,7 +155,7 @@ export default {
       }
     },
     setDeletionData(data) {
-       const deletionList = JSON.parse(data.dataSetVal);
+      const deletionList = JSON.parse(data.dataSetVal);
       if (data.isChecked) {
         this.$store.commit('list/appendDeletionData', deletionList);
       } else {

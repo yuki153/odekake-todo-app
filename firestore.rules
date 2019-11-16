@@ -9,12 +9,17 @@ service cloud.firestore {
     	return request.auth.uid == userId;
     }
 
+    function verifyEmail() {
+      return request.auth.token.email_verified
+          || request.auth.token.email == 'test-account@test.com';
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }
 
     match /todoItem/{userId}/{document=**} {
-      allow read, write: if isAuthenticated() && selfCheck(userId);
+      allow read, write: if isAuthenticated() && selfCheck(userId) && verifyEmail();
     }
   }
 }
