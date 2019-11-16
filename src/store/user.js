@@ -6,20 +6,20 @@ export const state = () => ({
 
 export const mutations = {
   setUser(state, payload) {
-    state.isUser = payload.bool;
-  },
-  setUid(state, payload) {
+    state.isUser = payload.isUser;
     state.uid = payload.uid;
+    state.emailVerified = payload.emailVerified;
+    const isUnsetCookie = /email_verified=false/.test(document.cookie) === false;
+    if (isUnsetCookie && state.isUser && state.emailVerified === false) {
+      console.log('set cookie');
+      document.cookie = 'email_verified=false; max-age=86400; path=/';
+    }
   },
-  setEmailVerified(state, payload) {
-    state.emailVerified = payload.bool;
-  }
 };
 
 export const getters = {
   isUser(state) {
-    // console.log('getters');
-    return state.isUser; //!!Object.keys(state.user).length;
+    return state.isUser;
   },
   uid(state) {
     return state.uid;
