@@ -41,7 +41,7 @@ import checkIcon from '~/components/simple/check-icon';
 import MixActionControllers from '~/components/mix/mix-action-controllers';
 import MixTodonamePopup from '~/components/mix/mix-todoname-popup';
 import MixLockScreen from '~/components/mix/mix-lock-screen';
-import firebase from "~/plugins/firebase";
+import fb from "~/plugins/firebase";
 import { showAlert } from "~/plugins/util";
 import { mapState } from 'vuex';
 
@@ -96,21 +96,23 @@ export default {
     }),
   },
   async mounted() {
+    if (window.unsubscribe) window.unsubscribe();
+    // Root(/)ページ経由でアクセスの場合（user 情報が既にセットされている）
     if (this.isUser && this.emailVerified) {
-      // TODO: リストページ始まりでアドレス確認を行うと、ロック画面解除後正しく動作しない
       this.init();
+    // このページにダイレクトでアクセスの場合
     } else {
       const user = await this.getAuthState();
+      // ログイン済みかつ、メール認証済みの場合
       if (user && user.emailVerified) {
-        if (/email_verified=true/.test(document.cookie)) {
-          // token を強制リフレッシュしないと firestore のユーザーデータが更新されない
-          await user.getIdToken(true);
-          document.cookie = 'email_verified=; max-age=0; path=/';
-        }
-        this.setUser(user);
-        this.init();
+        this.$router.push("/");
+      // ログイン済みかつ、メール認証が済んでいない場合
       } else if (user) {
-        this.setUser(user);
+        this.$store.commit('user/setUser', {
+          isUser: true,
+          uid: user.uid,
+          emailVerified: user.emailVerified
+        });
       } else {
         this.$router.push("/sign-in");
       }
@@ -127,13 +129,8 @@ export default {
     },
     getAuthState() {
       return new Promise((resolve) => {
-        firebase.auth().onAuthStateChanged(result => result ? resolve(result) : resolve(false));
+        window.unsubscribe = fb.auth().onAuthStateChanged(user => user ? resolve(user) : resolve(false));
       });
-    },
-    setUser(user) {
-      this.$store.commit('user/setUser', { bool: true });
-      this.$store.commit('user/setUid', { uid: user.uid });
-      this.$store.commit('user/setEmailVerified', { bool: user.emailVerified });
     },
     switchToDo(e) {
       if (this.isDeletable === false) {

@@ -16,6 +16,7 @@
 import fb from "~/plugins/firebase";
 import AppLogo from "~/components/simple/app-logo";
 import AppButton from '~/components/simple/app-button';
+import { mapState } from 'vuex';
 
 export default {
   components: {
@@ -30,16 +31,32 @@ export default {
     };
   },
   computed: {
-    validation: function() {
-      if (this.password && this.email) {
-        return true;
-      } else {
-        return false;
-      }
+    ...mapState('user', [
+      'isUser',
+    ]),
+    validation() {
+      return (this.password && this.email) ? true : false;
+    }
+  },
+  mounted() {
+    if (window.unsubscribe) window.unsubscribe();
+    if (this.isUser === false) {
+      window.unsubscribe = fb.auth().onAuthStateChanged(user => {
+        if (user) {
+          this.$store.commit('user/setUser', {
+            isUser: true,
+            uid: user.uid,
+            emailVerified: user.emailVerified
+          });
+          this.$router.push('/');
+        }
+      });
+    } else {
+      this.$router.push('/');
     }
   },
   methods: {
-    signUp: async function() {
+    async signUp() {
       try {
         const result = await fb.auth().createUserWithEmailAndPassword(this.email, this.password);
         await result.user.sendEmailVerification();

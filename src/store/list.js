@@ -35,7 +35,6 @@ export const mutations = {
 
 export const actions = {
   async getList(context, payload) {
-    // console.log('ACTIONS::getList');
     const docRef = await fb.firestore().collection('todoItem').doc(payload.uid);
     const docSnapShot = await docRef.get().catch((err) => console.log(err));
     // https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentSnapshot

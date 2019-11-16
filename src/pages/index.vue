@@ -43,30 +43,43 @@ export default {
     ...mapState('list', {
       listData: (state) => state.data,
     }),
+    ...mapState('todo-item', [
+      'currentDataKeyName'
+    ]),
   },
   methods: {
     getAuthState() {
       return new Promise((resolve) => {
-        fb.auth().onAuthStateChanged(result => result ? resolve(result) : resolve(false));
+        window.unsubscribe = fb.auth().onAuthStateChanged(user => user ? resolve(user) : resolve(false));
       });
     },
-    setUser(user) {
-      this.$store.commit('user/setUser', { bool: true });
-      this.$store.commit('user/setUid', { uid: user.uid });
-      this.$store.commit('user/setEmailVerified', { bool: user.emailVerified });
-    },
+    /**
+     * メール認証に必要なアクションをユーザーが行った場合、
+     * store の user.js にて cookie に email_verified がセットされる。
+     * メール認証後は再ログインしないと firestore のユーザデータが更新されないため token refresh を行う
+     *
+     * @param user {Object} firebase.auth() から取得のユーザデータ
+     */
+    async refreshFirebaseToken(user) {
+      if (/email_verified=false/.test(document.cookie)) {
+        await user.getIdToken(true);
+        console.log('token refresh ok');
+        document.cookie = 'email_verified=; max-age=0; path=/';
+      }
+    }
   },
   async mounted() {
-    if (!this.isUser) {
-      const user = await this.getAuthState();
+    if (window.unsubscribe) window.unsubscribe();
+    if(this.currentDataKeyName === '') {
+      const user = (this.isUser) ? fb.auth().currentUser : await this.getAuthState();
       if (user && user.emailVerified) {
-        if (/email_verified=true/.test(document.cookie)) {
-          // token を強制リフレッシュしないと firestore のユーザーデータが更新されない
-          await user.getIdToken(true);
-          document.cookie = 'email_verified=; max-age=0; path=/';
-        }
+        await this.refreshFirebaseToken(user);
         await this.$store.dispatch('list/getList', { uid: user.uid });
-        this.setUser(user);
+        this.$store.commit('user/setUser', {
+          isUser: true,
+          uid: user.uid,
+          emailVerified: user.emailVerified
+        });
         this.$store.commit('todo-item/setTodoState', {
           key: this.listData ? this.listData[0].value : 'example',
           name: this.listData ? this.listData[0].name : 'ExampleTODO',
@@ -76,7 +89,11 @@ export default {
           docId: this.listData ? this.listData[0].value : 'example',
         });
       } else if (user) {
-        this.setUser(user);
+        this.$store.commit('user/setUser', {
+          isUser: true,
+          uid: user.uid,
+          emailVerified: user.emailVerified
+        });
       } else {
         this.$router.push("/sign-in");
       }

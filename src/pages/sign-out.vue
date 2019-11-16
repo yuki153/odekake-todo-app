@@ -12,6 +12,7 @@
 import firebase from "~/plugins/firebase";
 import AppButton from '~/components/simple/app-button';
 import AppLogo from '~/components/simple/app-logo.vue'
+import { mapState } from 'vuex';
 
 export default {
   layout: "default",
@@ -19,26 +20,25 @@ export default {
     AppButton,
     AppLogo
   },
-  data() {
-    return {
-      isUser: false,
-      user: {},
-    }
+  computed: {
+    ...mapState('user', [
+      'isUser',
+    ]),
   },
   mounted() {
-      this.isUser = this.$store.getters['user/isUser'];
-      this.user = firebase.auth().currentUser
-    if (!this.isUser) {
+    if (this.isUser === false) {
       alert('自動ログインの有効期限が切れました。\nもう一度ログインし直してください');
       this.$router.push('/sign-in');
-    } else {
-      // // console.log(firebase.auth().currentUser);
     }
   },
   methods: {
-    signOut: function() {
+    signOut() {
       firebase.auth().signOut().then(() => {
-        // Sign-out successful.
+        this.$store.commit('user/setUser', {
+          isUser: false,
+          uid: '',
+          emailVerified: false,
+        });
         alert('logout successful');
         this.$router.push('/sign-in');
       }).catch((error) => {
