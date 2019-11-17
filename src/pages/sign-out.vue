@@ -37,6 +37,7 @@ export default {
         this.$store.commit('user/setUser', {
           isUser: false,
           uid: '',
+          email: '',
           emailVerified: false,
         });
         alert('logout successful');

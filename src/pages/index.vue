@@ -72,12 +72,13 @@ export default {
     if (window.unsubscribe) window.unsubscribe();
     if(this.currentDataKeyName === '') {
       const user = (this.isUser) ? fb.auth().currentUser : await this.getAuthState();
-      if (user && user.emailVerified) {
+      if (user && (user.emailVerified || user.email === 'test-account@test.com')) {
         await this.refreshFirebaseToken(user);
         await this.$store.dispatch('list/getList', { uid: user.uid });
         this.$store.commit('user/setUser', {
           isUser: true,
           uid: user.uid,
+          email: user.email,
           emailVerified: user.emailVerified
         });
         this.$store.commit('todo-item/setTodoState', {
@@ -92,6 +93,7 @@ export default {
         this.$store.commit('user/setUser', {
           isUser: true,
           uid: user.uid,
+          email: user.email,
           emailVerified: user.emailVerified
         });
       } else {

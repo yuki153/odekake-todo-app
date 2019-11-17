@@ -46,6 +46,7 @@ export default {
           this.$store.commit('user/setUser', {
             isUser: true,
             uid: user.uid,
+            email: user.email,
             emailVerified: user.emailVerified
           });
           this.$router.push('/');
