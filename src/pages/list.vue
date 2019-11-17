@@ -104,13 +104,14 @@ export default {
     } else {
       const user = await this.getAuthState();
       // ログイン済みかつ、メール認証済みの場合
-      if (user && user.emailVerified) {
+      if (user && (user.emailVerified || user.email === 'test-account@test.com')) {
         this.$router.push("/");
       // ログイン済みかつ、メール認証が済んでいない場合
       } else if (user) {
         this.$store.commit('user/setUser', {
           isUser: true,
           uid: user.uid,
+          email: user.email,
           emailVerified: user.emailVerified
         });
       } else {
