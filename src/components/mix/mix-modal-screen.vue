@@ -18,20 +18,19 @@
 
       <!-- 予定入力画面 -->
       <div :class="`setTodo${getSelectState ? '' : ' is-hide'}`">
-        <div class="setTodo__back" @click="backToIconSelect()">アイコン選択に戻る</div>
         <ul class="setTodo__settingList">
           <li class="setTodo__settingItem">
             <p class="setTodo__text">選択済みのアイコン</p>
             <circle-icon
               :color="getTodo.hexCode"
               :img="getTodo.svgName"
-              :size="48"/>
+              :size="48"
+              @click.native="backToIconSelect"/>
           </li>
           <li class="setTodo__settingItem">
             <p class="setTodo__text">予定時刻</p>
             <todo-time
-              @emitHour="getHour"
-              @emitMin="getMin"
+              @emitTime="getTime"
               :hour="getTodo.time.hour"
               :min="getTodo.time.min"/>
           </li>
@@ -44,6 +43,10 @@
             @click.native="getUpdateState ?
               updateDataInTodoItem(getTodo) : setDataInTodoItem(getTodo)"
           >決定</app-button>
+          <app-button
+            :isActived="true"
+            @click.native="cancel"
+          >キャンセル</app-button>
         </ul>
       </div>
     </div>
@@ -131,12 +134,12 @@ export default {
       if (value) this.setTodoText(value);
     },
     // todo-time からの emit で値を受け取る関数
-    getHour(value) {
-      if (value) this.setTodoHour(value);
-    },
-    // todo-time からの emit で値を受け取る関数
-    getMin(value) {
-      if (value) this.setTodoMin(value);
+    getTime(value) {
+      if (value) {
+        const time = value.split(':');
+        this.setTodoHour(time[0]);
+        this.setTodoMin(time[1]);
+      }
     },
     setDataInTodoItem(todo) {
       const todoData = {
@@ -169,6 +172,10 @@ export default {
       this.reset();
       this.$store.commit("modal-screen/disableState");
     },
+    cancel() {
+      this.reset();
+      this.$store.commit("modal-screen/disableState");
+    }
   },
 };
 </script>
@@ -212,25 +219,6 @@ export default {
   width: 100%;
   height: 100vh;
 
-  &__back {
-    position: absolute;
-    margin: 16px 0 0 10%;
-    color: #fff;
-    font-size: 16px;
-    padding-left: 20px;
-
-    &::before {
-      position: absolute;
-      top: 50%;
-      left: 0;
-      width: 16px;
-      height: 16px;
-      border-left: #fff 2px solid;
-      border-bottom: #fff 2px solid;
-      transform: translate(0, -50%) rotate(45deg);
-      content: "";
-    }
-  }
   &__settingList {
     position: absolute;
     width: 80%;
@@ -254,6 +242,9 @@ export default {
     font-size: 12px;
     padding: 4px;
     border: 1px solid #c4c4c4;
+  }
+  .appButton + .appButton {
+    margin-left: 8px;
   }
 }
 </style>
