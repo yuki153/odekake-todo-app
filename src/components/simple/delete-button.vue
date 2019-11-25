@@ -1,13 +1,13 @@
 <template>
   <button
-    v-if="isShow" 
+    v-if="isShown"
     class="deleteButton">
   </button>
 </template>
 <script>
 export default {
   props: {
-    isShow: Boolean
+    isShown: Boolean
   }
 }
 </script>

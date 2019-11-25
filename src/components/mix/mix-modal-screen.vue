@@ -1,5 +1,5 @@
 <template>
-  <modal-screen :isShow="getModalState">
+  <modal-screen :isShown="getModalState">
     <div class="wrap">
       <!-- アイコン選択画面 -->
       <div :class="`iconList${getSelectState ? ' is-hide' : ''}`">
@@ -89,7 +89,7 @@ export default {
   },
   computed: {
     ...mapState("modal-screen", {
-      getModalState: state => state.isShow
+      getModalState: state => state.isShown
     }),
     ...mapState('mix-modal-screen', {
       getTodo: state => state.todo,

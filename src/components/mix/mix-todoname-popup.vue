@@ -1,5 +1,5 @@
 <template>
-    <modal-screen :isShow="isShown">
+    <modal-screen :isShown="isShown">
       <div class="popup">
         <p class="popup__title">予定の新規作成</p>
         <input class="popup__textarea" type="text" placeholder="予定の名前を入力してください" v-model="todoname"/>
@@ -124,7 +124,7 @@ export default {
 
 .popup /deep/ .appButton {
   box-shadow: none;
-  &.isActive {
+  &.isActived {
     box-shadow: none;
   }
 }

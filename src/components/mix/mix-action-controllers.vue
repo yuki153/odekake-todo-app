@@ -1,5 +1,5 @@
 <template>
-  <div :class="`actionControllers${isActived ? '': ' isHidden'}`">
+  <div :class="`actionControllers${isActived ? '': ' is-hidden'}`">
     <div class="actionContent">
       <ul class="actionContent__list">
         <li
@@ -12,11 +12,11 @@
       </ul>
     </div>
     <add-button
-      :isShow="buttons.add"
-      :isActive="isActived"
+      :isShown="buttons.add"
+      :isActived="isActived"
       @click.native="toggleState"/>
     <delete-button
-      :isShow="buttons.del"
+      :isShown="buttons.del"
       @click.native="delAction"
     />
   </div>
@@ -59,7 +59,7 @@ export default {
   width: 100%;
   transform: translate(0, 0);
   transition: .3s;
-  &.isHidden {
+  &.is-hidden {
     transform: translate(0, 100%);
   }
 }
@@ -91,8 +91,8 @@ export default {
     top: -70px;
     transition: .3s;
   }
-  &.isHidden /deep/ .addButton,
-  &.isHidden /deep/ .deleteButton {
+  &.is-hidden /deep/ .addButton,
+  &.is-hidden /deep/ .deleteButton {
     top: -122px;
   }
 }

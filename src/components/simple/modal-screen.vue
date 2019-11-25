@@ -1,6 +1,6 @@
 <template>
   <transition name="modal">
-    <div v-if="isShow" class="modal-screen">
+    <div v-if="isShown" class="modal-screen">
       <slot></slot>
     </div>
   </transition>
@@ -9,7 +9,7 @@
 <script>
 export default {
   props: {
-    isShow: Boolean,
+    isShown: Boolean,
   }
 }
 </script>

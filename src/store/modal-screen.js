@@ -1,13 +1,13 @@
 
 export const state = () => ({
-  isShow: false,
+  isShown: false,
 });
 
 export const mutations = {
   enableState(state) {
-    state.isShow = true;
+    state.isShown = true;
   },
   disableState(state) {
-    state.isShow = false;
+    state.isShown = false;
   }
 };

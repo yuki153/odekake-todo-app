@@ -1,5 +1,5 @@
 <template>
-  <div :class="`actionButton${actionContent.isHidden ? ' isHidden': ''}`">
+  <div :class="`actionButton${actionContent.isHidden ? ' is-hidden': ''}`">
     <div class="actionContent">
       <ul class="actionContent__list">
         <li class="actionContent__item" @click="showModal">予定の追加</li>
@@ -8,11 +8,11 @@
       </ul>
     </div>
     <add-button
-      :isShow="!isDeletable"
-      :isActive="isButtonState"
+      :isShown="!isDeletable"
+      :isActived="isButtonState"
       @click.native="toggleState"/>
     <delete-button
-      :isShow="isDeletable"
+      :isShown="isDeletable"
       @click.native="confirmDelete"
     />
   </div>
@@ -78,7 +78,7 @@ export default {
   width: 100%;
   transform: translate(0, 0);
   transition: .3s;
-  &.isHidden {
+  &.is-hidden {
     transform: translate(0, 168px);
   }
 }
@@ -110,8 +110,8 @@ export default {
     top: -70px;
     transition: .3s;
   }
-  &.isHidden /deep/ .addButton,
-  &.isHidden /deep/ .deleteButton {
+  &.is-hidden /deep/ .addButton,
+  &.is-hidden /deep/ .deleteButton {
     top: -122px;
   }
 }
