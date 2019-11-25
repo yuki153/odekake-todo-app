@@ -5,8 +5,16 @@
     <section class="main__section">
       <todo-list/>
       <mix-modal-screen/>
-      <mix-action-button/>
       <mix-todoname-popup :isShown="isShown"/>
+      <mix-action-controllers
+        :buttons="mixActionControllers.buttons"
+        :actions="[
+          { name: '予定の追加', event: showModal },
+          { name: '予定の削除', event: prepareDelete },
+          { name: '計画の新規作成', event: showPopup }
+        ]"
+        :delAction="confirmDelete"
+      />
     </section>
   </div>
 </template>
@@ -14,7 +22,7 @@
 <script>
 import FirebaseQuery from "~/plugins/firebase-query.js";
 import AppLoadding from '~/components/simple/app-loading';
-import MixActionButton from '~/components/mix/mix-action-button';
+import MixActionControllers from '~/components/mix/mix-action-controllers';
 import MixModalScreen from '~/components/mix/mix-modal-screen';
 import MixTodonamePopup from "~/components/mix/mix-todoname-popup";
 import TodoList from '~/components/mix/todo-list';
@@ -26,7 +34,7 @@ export default {
   layout: 'default',
   components: {
     AppLoadding,
-    MixActionButton,
+    MixActionControllers,
     MixModalScreen,
     MixTodonamePopup,
     TodoList,
@@ -35,7 +43,8 @@ export default {
   computed: {
     ...mapState('user', [
       'isUser',
-      'emailVerified'
+      'emailVerified',
+      'uid',
     ]),
     ...mapState('mix-todoname-popup', [
       'isShown'
@@ -44,8 +53,17 @@ export default {
       listData: (state) => state.data,
     }),
     ...mapState('todo-item', [
-      'currentDataKeyName'
+      'currentDataKeyName',
+      'isDeletable'
     ]),
+    ...mapState('mix-action-controllers', {
+      mixActionControllers: (state) => {
+        return {
+          buttons: state.buttons,
+          isActived: state.isActived,
+        }
+      }
+    }),
   },
   methods: {
     getAuthState() {
@@ -66,10 +84,33 @@ export default {
         console.log('token refresh ok');
         document.cookie = 'email_verified=; max-age=0; path=/';
       }
+    },
+    showModal() {
+      this.$store.commit('mix-modal-screen/init');
+      this.$store.commit('modal-screen/enableState');
+      this.$store.commit('mix-action-controllers/initializeState');
+    },
+    prepareDelete() {
+      this.$store.commit('mix-action-controllers/enableDelbutton');
+      this.$store.commit('todo-item/isDeletable');
+    },
+    confirmDelete() {
+      this.$store.commit('todo-item/deleteData', {uid: this.uid});
+      this.$store.commit('mix-action-controllers/initializeState');
+    },
+    showPopup() {
+      this.$store.commit('mix-todoname-popup/show');
+      this.$store.commit('mix-action-controllers/initializeState');
     }
   },
   async mounted() {
     if (window.unsubscribe) window.unsubscribe();
+        if (this.isDeletable) {
+      this.$store.commit('todo-item/resetDeletionIds');
+      this.$store.commit('todo-item/isDeletable');
+    }
+    this.$store.commit('mix-action-controllers/initializeState');
+
     if(this.currentDataKeyName === '') {
       const user = (this.isUser) ? fb.auth().currentUser : await this.getAuthState();
       if (user && (user.emailVerified || user.email === 'test-account@test.com')) {
