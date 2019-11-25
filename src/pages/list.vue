@@ -122,10 +122,10 @@ export default {
   methods: {
     init() {
       if (this.isDeletable) {
-        this.$store.commit('mix-action-controllers/initializeState');
         this.$store.commit('list/resetDeletionData');
         this.$store.commit('list/isDeletable');
       }
+      this.$store.commit('mix-action-controllers/initializeState');
       this.$store.dispatch('list/getList', { uid: this.uid });
     },
     getAuthState() {

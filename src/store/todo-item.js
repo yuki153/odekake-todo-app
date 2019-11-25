@@ -69,6 +69,9 @@ export const mutations = {
     const idx = state.deletionIds.indexOf(payload.id);
     if (idx >= 0) state.deletionIds.splice(idx, 1);
   },
+  resetDeletionIds(state) {
+    state.deletionIds = [];
+  },
   deleteData(state, payload) {
     state.isDeletable = false;
     const itemLen = state.data.length;
