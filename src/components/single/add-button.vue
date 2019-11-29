@@ -24,7 +24,7 @@ export default {
     height: 48px;
     border-radius: 50%;
     background-color: $app-color;
-    box-shadow: #ddd 0 3px 6px 0px;
+    box-shadow: #aaa 0 3px 6px 0px;
     outline: none;
     z-index: 90;
 
@@ -48,7 +48,7 @@ export default {
     }
 
     &.is-active {
-      box-shadow: #333 0 3px 6px 0px;
+      box-shadow: #aaa 0 3px 6px 0px;
 
       .addButton__graphic {
         &.-stick01 {

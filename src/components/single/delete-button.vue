@@ -20,7 +20,7 @@ export default {
     height: 48px;
     border-radius: 50%;
     background: url('~assets/svg/ico-trash.svg') $app-color no-repeat center center;
-    box-shadow: #ddd 0 3px 6px 0px;
+    box-shadow: #aaa 0 3px 6px 0px;
     outline: none;
     z-index: 90;
   }
