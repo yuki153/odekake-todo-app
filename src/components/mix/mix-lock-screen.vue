@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import AppButton from '~/components/simple/app-button';
-import ModalScreen from '~/components/simple/modal-screen';
+import AppButton from '~/components/single/app-button';
+import ModalScreen from '~/components/single/modal-screen';
 import { mapState } from 'vuex';
 
 export default {

@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import AddButton from "~/components/simple/add-button";
-import DeleteButton from "~/components/simple/delete-button";
+import AddButton from "~/components/single/add-button";
+import DeleteButton from "~/components/single/delete-button";
 import { mapState } from 'vuex';
 
 export default {

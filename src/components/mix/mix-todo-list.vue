@@ -11,7 +11,7 @@
           :data-id="datum.id"
           @click="toggleCheckmark">
         </div>
-        <todo-item
+        <mix-todo-item
           :iconColor="datum.hexCode"
           :iconImg="datum.svgName"
           :text="datum.text"
@@ -23,35 +23,35 @@
   </div>
 </template>
 <script>
-import TodoItem from '~/components/mix/todo-item';
+import MixTodoItem from '~/components/mix/mix-todo-item';
 import { mapState } from 'vuex';
 
 export default {
   components: {
-    TodoItem,
+    MixTodoItem,
   },
   computed: {
-    ...mapState('todo-item', [
+    ...mapState('mix-todo-item', [
       'isDeletable',
       'data'
     ])
   },
   methods: {
     toggleCheckmark: function(e) {
-      e.target.classList.toggle('isChecked');
-      if (e.target.classList.contains('isChecked')) {
-        this.$store.commit('todo-item/addDeletionIds', {
+      e.target.classList.toggle('is-checked');
+      if (e.target.classList.contains('is-checked')) {
+        this.$store.commit('mix-todo-item/addDeletionIds', {
           id: e.target.dataset.id
         });
       } else {
-        this.$store.commit('todo-item/removeDeletionIds', {
+        this.$store.commit('mix-todo-item/removeDeletionIds', {
           id: e.target.dataset.id
         });
       }
     },
     showModal: function(datum) {
       // console.log(datum);
-      this.$store.commit('mix-modal-screen/update', {
+      this.$store.commit('mix-icon-selection-screen/update', {
         svgName: datum.svgName,
         hexCode: datum.hexCode,
         time: {
@@ -102,8 +102,8 @@ export default {
         border: 2px solid #ccc;
       }
 
-      &.isChecked::after,
-      &.isChecked::before {
+      &.is-checked::after,
+      &.is-checked::before {
         border-color: #38c970;
       }
     }

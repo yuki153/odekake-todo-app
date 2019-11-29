@@ -1,6 +1,6 @@
 <template>
   <form class="todoTime">
-    <input class="todoTime__timer" type="time" name="time" value="00:00" @change="updateTime">
+    <input class="todoTime__timer" type="time" name="time" value="12:00" @change="updateTime">
   </form>
 </template>
 <script>

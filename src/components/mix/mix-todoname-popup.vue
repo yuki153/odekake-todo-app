@@ -11,8 +11,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import AppButton from "~/components/simple/app-button";
-import ModalScreen from "~/components/simple/modal-screen";
+import AppButton from "~/components/single/app-button";
+import ModalScreen from "~/components/single/modal-screen";
 
 export default {
   components: {
@@ -28,7 +28,7 @@ export default {
     isShown: Boolean,
   },
   computed: {
-    ...mapState('todo-item', [
+    ...mapState('mix-todo-item', [
       'currentDataKeyName',
       'currentTodoname'
     ]),
@@ -37,7 +37,7 @@ export default {
     async createNewData() {
       if (this.todoname) {
         const uid = this.$store.getters['user/uid'];
-        await this.$store.dispatch('todo-item/createNewData', {
+        await this.$store.dispatch('mix-todo-item/createNewData', {
           todoname: this.todoname,
           uid,
         });

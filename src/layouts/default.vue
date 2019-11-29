@@ -6,8 +6,8 @@
   </div>
 </template>
 <script>
-import AppHeader from '~/components/simple/app-header.vue';
-import AppFooter from '~/components/simple/app-footer.vue';
+import AppHeader from '~/components/single/app-header.vue';
+import AppFooter from '~/components/single/app-footer.vue';
 
 export default {
   components: {

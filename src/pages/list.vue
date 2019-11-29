@@ -26,7 +26,7 @@
     <mix-action-controllers
       :buttons="mixActionControllers.buttons"
       :actions="[
-        { name: '計画の新規作成', event: showPopup },
+        { name: '計画の新規作成', event: showListCreating },
         { name: '計画の削除', event: prepareDelete },
         // { name: '計画の名前変更', event:'' }
       ]"
@@ -36,8 +36,8 @@
 </template>
 
 <script>
-import AppLoadding from '~/components/simple/app-loading';
-import checkIcon from '~/components/simple/check-icon';
+import AppLoadding from '~/components/single/app-loading';
+import checkIcon from '~/components/single/check-icon';
 import MixActionControllers from '~/components/mix/mix-action-controllers';
 import MixTodonamePopup from '~/components/mix/mix-todoname-popup';
 import MixLockScreen from '~/components/mix/mix-lock-screen';
@@ -65,7 +65,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('todo-item', [
+    ...mapState('mix-todo-item', [
       'currentDataKeyName',
       'currentTodoname'
     ]),
@@ -135,15 +135,15 @@ export default {
     },
     switchToDo(e) {
       if (this.isDeletable === false) {
-        this.$store.commit('todo-item/setTodoState', {
+        this.$store.commit('mix-todo-item/setTodoState', {
           key: e.target.dataset.id,
           name: e.target.innerText,
         });
-        const docId = this.$store.getters['todo-item/docId'];
-        this.$store.dispatch('todo-item/getTodo', { docId, uid: this.uid });
+        const docId = this.$store.getters['mix-todo-item/docId'];
+        this.$store.dispatch('mix-todo-item/getTodo', { docId, uid: this.uid });
       }
     },
-    showPopup() {
+    showListCreating() {
       this.$store.commit('mix-todoname-popup/show');
       this.$store.commit('mix-action-controllers/initializeState');
     },

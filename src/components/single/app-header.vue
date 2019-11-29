@@ -8,7 +8,7 @@ import { mapState } from 'vuex';
 
 export default {
   computed: {
-    ...mapState('todo-item', [
+    ...mapState('mix-todo-item', [
       'currentTodoname'
     ]),
   }
