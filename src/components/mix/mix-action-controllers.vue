@@ -17,12 +17,13 @@
       @click.native="toggleState"/>
     <delete-button
       :isShown="buttons.del"
-      @click.native="delAction"
+      @click.native="fire(delAction)"
     />
   </div>
 </template>
 
 <script>
+import { fire } from "~/plugins/util";
 import AddButton from "~/components/single/add-button";
 import DeleteButton from "~/components/single/delete-button";
 import { mapState } from 'vuex';
@@ -43,6 +44,7 @@ export default {
     ]),
   },
   methods: {
+    fire, // import from plugins/util
     toggleState() {
       this.$store.commit('mix-action-controllers/isActived');
     },

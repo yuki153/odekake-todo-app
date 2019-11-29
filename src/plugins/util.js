@@ -31,3 +31,17 @@ export const showAlert = (() => {
     }
   }
 })();
+
+/**
+ * 連続実行抑制関数
+ */
+export const fire = (() => {
+  let isFired = false;
+  return (event) => {
+    if (isFired === false) {
+      isFired = true;
+      event();
+      setTimeout(()=> isFired = false, 1000);
+    }
+  }
+})();

@@ -4,12 +4,13 @@
         <p class="popup__title">予定の新規作成</p>
         <input class="popup__textarea" type="text" placeholder="予定の名前を入力してください" v-model="todoname"/>
         <button class="popup__close" @click="close"></button>
-        <app-button :isActived="todoname ? true : false" @click.native="createNewData">決定</app-button>
+        <app-button :isActived="!!todoname" @click.native="fire(createNewData)">決定</app-button>
       </div>
     </modal-screen>
 </template>
 
 <script>
+import { fire } from "~/plugins/util";
 import { mapState } from 'vuex';
 import AppButton from "~/components/single/app-button";
 import ModalScreen from "~/components/single/modal-screen";
@@ -34,6 +35,7 @@ export default {
     ]),
   },
   methods: {
+    fire, // import from plugins/util
     async createNewData() {
       if (this.todoname) {
         const uid = this.$store.getters['user/uid'];

@@ -41,7 +41,8 @@
           <app-button
             :isActived="true"
             @click.native="getUpdateState ?
-              updateDataInTodoItem(getTodo) : setDataInTodoItem(getTodo)"
+              fire(() => updateDataInTodoItem(getTodo)) :
+              fire(() => setDataInTodoItem(getTodo))"
           >決定</app-button>
           <app-button
             :isActived="true"
@@ -54,6 +55,7 @@
 </template>
 
 <script>
+import { fire } from "~/plugins/util";
 import ModalScreen from "~/components/single/modal-screen";
 import CircleIcon from "~/components/single/circle-icon";
 import TodoTextarea from "~/components/single/todo-textarea";
@@ -100,6 +102,7 @@ export default {
   mounted() {
   },
   methods: {
+    fire, // import from plugins/util
     ...mapMutations('mix-icon-selection-screen', [
       'backToIconSelect',
       'goToIconInfo',
