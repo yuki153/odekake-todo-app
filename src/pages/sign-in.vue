@@ -19,9 +19,9 @@
 
 <script>
 import fb from '~/plugins/firebase';
-import AppLogo from '~/components/simple/app-logo'
-import AppButton from '~/components/simple/app-button';
-import AppLoading from '~/components/simple/app-loading';
+import AppLogo from '~/components/single/app-logo'
+import AppButton from '~/components/single/app-button';
+import AppLoading from '~/components/single/app-loading';
 import { mapState } from 'vuex';
 
 export default {

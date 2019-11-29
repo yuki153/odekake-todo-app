@@ -1,7 +1,7 @@
 <template>
   <button
-    v-if="isShow"
-    :class="`addButton${isActive ? ' isActive': ''}`"
+    v-if="isShown"
+    :class="`addButton${isActived ? ' is-active': ''}`"
     >
     <div class="addButton__graphic -stick01"></div>
     <div class="addButton__graphic -stick02"></div>
@@ -10,8 +10,8 @@
 <script>
 export default {
   props: {
-    isActive: Boolean,
-    isShow: Boolean
+    isActived: Boolean,
+    isShown: Boolean
   }
 }
 </script>
@@ -24,7 +24,7 @@ export default {
     height: 48px;
     border-radius: 50%;
     background-color: $app-color;
-    box-shadow: #ddd 0 3px 6px 0px;
+    box-shadow: #aaa 0 3px 6px 0px;
     outline: none;
     z-index: 90;
 
@@ -47,8 +47,8 @@ export default {
       }
     }
 
-    &.isActive {
-      box-shadow: #333 0 3px 6px 0px;
+    &.is-active {
+      box-shadow: #aaa 0 3px 6px 0px;
 
       .addButton__graphic {
         &.-stick01 {

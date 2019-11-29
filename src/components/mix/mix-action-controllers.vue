@@ -1,5 +1,5 @@
 <template>
-  <div :class="`actionControllers${isActived ? '': ' isHidden'}`">
+  <div :class="`actionControllers${isActived ? '': ' is-hidden'}`">
     <div class="actionContent">
       <ul class="actionContent__list">
         <li
@@ -12,19 +12,20 @@
       </ul>
     </div>
     <add-button
-      :isShow="buttons.add"
-      :isActive="isActived"
+      :isShown="buttons.add"
+      :isActived="isActived"
       @click.native="toggleState"/>
     <delete-button
-      :isShow="buttons.del"
-      @click.native="delAction"
+      :isShown="buttons.del"
+      @click.native="fire(delAction)"
     />
   </div>
 </template>
 
 <script>
-import AddButton from "~/components/simple/add-button";
-import DeleteButton from "~/components/simple/delete-button";
+import { fire } from "~/plugins/util";
+import AddButton from "~/components/single/add-button";
+import DeleteButton from "~/components/single/delete-button";
 import { mapState } from 'vuex';
 
 export default {
@@ -43,6 +44,7 @@ export default {
     ]),
   },
   methods: {
+    fire, // import from plugins/util
     toggleState() {
       this.$store.commit('mix-action-controllers/isActived');
     },
@@ -59,7 +61,7 @@ export default {
   width: 100%;
   transform: translate(0, 0);
   transition: .3s;
-  &.isHidden {
+  &.is-hidden {
     transform: translate(0, 100%);
   }
 }
@@ -91,8 +93,8 @@ export default {
     top: -70px;
     transition: .3s;
   }
-  &.isHidden /deep/ .addButton,
-  &.isHidden /deep/ .deleteButton {
+  &.is-hidden /deep/ .addButton,
+  &.is-hidden /deep/ .deleteButton {
     top: -122px;
   }
 }

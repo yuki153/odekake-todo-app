@@ -10,8 +10,8 @@
 
 <script>
 import firebase from "~/plugins/firebase";
-import AppButton from '~/components/simple/app-button';
-import AppLogo from '~/components/simple/app-logo.vue'
+import AppButton from '~/components/single/app-button';
+import AppLogo from '~/components/single/app-logo.vue'
 import { mapState } from 'vuex';
 
 export default {

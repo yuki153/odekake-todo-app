@@ -15,7 +15,7 @@
   </div>
 </template>
 <script>
-import CircleIcon from "~/components/simple/circle-icon";
+import CircleIcon from "~/components/single/circle-icon";
 
 export default {
   components: {

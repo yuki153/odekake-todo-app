@@ -1,5 +1,5 @@
 <template>
-  <button :class="`appButton${isActived ? ' isActive' : ''}`">
+  <button :class="`appButton${isActived ? ' is-active' : ''}`">
     <slot></slot>
   </button>
 </template>
@@ -19,11 +19,11 @@ export default {
     font-size: 12px;
     font-weight: bold;
     border-radius: 8px;
-    box-shadow: rgba(0, 0, 0, .4) 0 3px 6px 0px;
+    box-shadow: rgba(0, 0, 0, .3) 0 3px 6px 0px;
 
-    &.isActive {
+    &.is-active {
       background-color: $app-color;
-      box-shadow: rgba(0, 0, 0, .4) 0 3px 6px 0px;
+      box-shadow: rgba(0, 0, 0, .3) 0 3px 6px 0px;
     }
   }
 </style>

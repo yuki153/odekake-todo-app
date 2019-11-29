@@ -1,18 +1,19 @@
 <template>
-    <modal-screen :isShow="isShown">
+    <modal-screen :isShown="isShown">
       <div class="popup">
         <p class="popup__title">予定の新規作成</p>
         <input class="popup__textarea" type="text" placeholder="予定の名前を入力してください" v-model="todoname"/>
         <button class="popup__close" @click="close"></button>
-        <app-button :isActived="todoname ? true : false" @click.native="createNewData">決定</app-button>
+        <app-button :isActived="!!todoname" @click.native="fire(createNewData)">決定</app-button>
       </div>
     </modal-screen>
 </template>
 
 <script>
+import { fire } from "~/plugins/util";
 import { mapState } from 'vuex';
-import AppButton from "~/components/simple/app-button";
-import ModalScreen from "~/components/simple/modal-screen";
+import AppButton from "~/components/single/app-button";
+import ModalScreen from "~/components/single/modal-screen";
 
 export default {
   components: {
@@ -28,16 +29,17 @@ export default {
     isShown: Boolean,
   },
   computed: {
-    ...mapState('todo-item', [
+    ...mapState('mix-todo-item', [
       'currentDataKeyName',
       'currentTodoname'
     ]),
   },
   methods: {
+    fire, // import from plugins/util
     async createNewData() {
       if (this.todoname) {
         const uid = this.$store.getters['user/uid'];
-        await this.$store.dispatch('todo-item/createNewData', {
+        await this.$store.dispatch('mix-todo-item/createNewData', {
           todoname: this.todoname,
           uid,
         });
@@ -124,7 +126,7 @@ export default {
 
 .popup /deep/ .appButton {
   box-shadow: none;
-  &.isActive {
+  &.isActived {
     box-shadow: none;
   }
 }

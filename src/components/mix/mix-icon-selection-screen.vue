@@ -1,5 +1,5 @@
 <template>
-  <modal-screen :isShow="getModalState">
+  <modal-screen :isShown="getModalState">
     <div class="wrap">
       <!-- アイコン選択画面 -->
       <div :class="`iconList${getSelectState ? ' is-hide' : ''}`">
@@ -41,7 +41,8 @@
           <app-button
             :isActived="true"
             @click.native="getUpdateState ?
-              updateDataInTodoItem(getTodo) : setDataInTodoItem(getTodo)"
+              fire(() => updateDataInTodoItem(getTodo)) :
+              fire(() => setDataInTodoItem(getTodo))"
           >決定</app-button>
           <app-button
             :isActived="true"
@@ -54,11 +55,12 @@
 </template>
 
 <script>
-import ModalScreen from "~/components/simple/modal-screen";
-import CircleIcon from "~/components/simple/circle-icon";
-import TodoTextarea from "~/components/simple/todo-textarea";
-import TodoTime from "~/components/simple/todo-time";
-import AppButton from "~/components/simple/app-button";
+import { fire } from "~/plugins/util";
+import ModalScreen from "~/components/single/modal-screen";
+import CircleIcon from "~/components/single/circle-icon";
+import TodoTextarea from "~/components/single/todo-textarea";
+import TodoTime from "~/components/single/todo-time";
+import AppButton from "~/components/single/app-button";
 import { mapState, mapMutations } from "vuex";
 
 export default {
@@ -89,9 +91,9 @@ export default {
   },
   computed: {
     ...mapState("modal-screen", {
-      getModalState: state => state.isShow
+      getModalState: state => state.isShown
     }),
-    ...mapState('mix-modal-screen', {
+    ...mapState('mix-icon-selection-screen', {
       getTodo: state => state.todo,
       getUpdateState: state => state.isUpdate,
       getSelectState: state => state.isSelected,
@@ -100,7 +102,8 @@ export default {
   mounted() {
   },
   methods: {
-    ...mapMutations('mix-modal-screen', [
+    fire, // import from plugins/util
+    ...mapMutations('mix-icon-selection-screen', [
       'backToIconSelect',
       'goToIconInfo',
       'setTodoText',
@@ -152,7 +155,7 @@ export default {
         }
       };
       const uid = this.$store.getters['user/uid'];
-      this.$store.commit("todo-item/setData", {todoData, uid});
+      this.$store.commit("mix-todo-item/setData", {todoData, uid});
       this.reset();
       this.$store.commit("modal-screen/disableState");
     },
@@ -168,7 +171,7 @@ export default {
         }
       };
       const uid = this.$store.getters['user/uid'];
-      this.$store.commit('todo-item/updateData', {todoData, uid})
+      this.$store.commit('mix-todo-item/updateData', {todoData, uid})
       this.reset();
       this.$store.commit("modal-screen/disableState");
     },
