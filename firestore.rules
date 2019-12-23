@@ -6,16 +6,12 @@ service cloud.firestore {
     }
 
     function selfCheck(userId) {
-    	return request.auth.uid == userId;
+      return request.auth.uid == userId;
     }
 
     function verifyEmail() {
       return request.auth.token.email_verified
           || request.auth.token.email == 'test-account@test.com';
-    }
-
-    match /{document=**} {
-      allow read, write: if false;
     }
 
     match /todoItem/{userId}/{document=**} {
