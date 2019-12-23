@@ -96,6 +96,11 @@ export default {
     }),
   },
   async mounted() {
+    fb.analytics().logEvent('page_view', {
+      page_location: window.location.href,
+      page_title: '[list]odekake-todo',
+      is_pwa: window.matchMedia('(display-mode: standalone)').matches
+    });
     if (window.unsubscribe) window.unsubscribe();
     // Root(/)ページ経由でアクセスの場合（user 情報が既にセットされている）
     if (this.isUser && this.emailVerified) {

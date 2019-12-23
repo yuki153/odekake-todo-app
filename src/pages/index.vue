@@ -104,6 +104,11 @@ export default {
     }
   },
   async mounted() {
+    fb.analytics().logEvent('page_view', {
+      page_location: window.location.href,
+      page_title: '[index]odekake-todo',
+      is_pwa: window.matchMedia('(display-mode: standalone)').matches
+    });
     if (window.unsubscribe) window.unsubscribe();
         if (this.isDeletable) {
       this.$store.commit('mix-todo-item/resetDeletionIds');

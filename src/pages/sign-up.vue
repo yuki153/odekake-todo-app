@@ -39,6 +39,11 @@ export default {
     }
   },
   mounted() {
+    fb.analytics().logEvent('page_view', {
+      page_location: window.location.href,
+      page_title: '[sign-up]odekake-todo',
+      is_pwa: window.matchMedia('(display-mode: standalone)').matches
+    });
     if (window.unsubscribe) window.unsubscribe();
     if (this.isUser === false) {
       window.unsubscribe = fb.auth().onAuthStateChanged(user => {
