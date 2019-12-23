@@ -26,10 +26,11 @@ export default {
     ]),
   },
   mounted() {
-    if (this.isUser === false) {
-      alert('自動ログインの有効期限が切れました。\nもう一度ログインし直してください');
-      this.$router.push('/sign-in');
-    }
+    firebase.analytics().logEvent('page_view', {
+      page_location: window.location.href,
+      page_title: '[sign-out]odekake-todo',
+      is_pwa: window.matchMedia('(display-mode: standalone)').matches
+    });
   },
   methods: {
     signOut() {

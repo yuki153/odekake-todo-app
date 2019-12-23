@@ -49,6 +49,12 @@ export default {
   mounted() {
     if (window.unsubscribe) window.unsubscribe();
     if (this.isUser === false) {
+      // pwa での start_url が /sign-in の為
+      fb.analytics().logEvent('page_view', {
+        page_location: window.location.href,
+        page_title: '[sign-in]odekake-todo',
+        is_pwa: window.matchMedia('(display-mode: standalone)').matches
+      });
       window.unsubscribe = fb.auth().onAuthStateChanged(user => {
         if (user) {
           this.$store.commit('user/setUser', {
