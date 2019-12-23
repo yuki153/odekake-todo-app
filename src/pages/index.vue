@@ -116,19 +116,19 @@ export default {
       if (user && (user.emailVerified || user.email === 'test-account@test.com')) {
         await this.refreshFirebaseToken(user);
         await this.$store.dispatch('list/getList', { uid: user.uid });
+        this.$store.commit('mix-todo-item/setTodoState', {
+          key: this.listData ? this.listData[0].value : 'example',
+          name: this.listData ? this.listData[0].name : 'ExampleTODO',
+        });
+        await this.$store.dispatch('mix-todo-item/getTodo', {
+          uid: user.uid,
+          docId: this.listData ? this.listData[0].value : 'example',
+        });
         this.$store.commit('user/setUser', {
           isUser: true,
           uid: user.uid,
           email: user.email,
           emailVerified: user.emailVerified
-        });
-        this.$store.commit('mix-todo-item/setTodoState', {
-          key: this.listData ? this.listData[0].value : 'example',
-          name: this.listData ? this.listData[0].name : 'ExampleTODO',
-        });
-        this.$store.dispatch('mix-todo-item/getTodo', {
-          uid: user.uid,
-          docId: this.listData ? this.listData[0].value : 'example',
         });
       } else if (user) {
         this.$store.commit('user/setUser', {
