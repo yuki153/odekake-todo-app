@@ -1,13 +1,18 @@
-import firebase from 'firebase';
+import * as firebase from 'firebase/app';
+import 'firebase/analytics';
+import 'firebase/auth';
+import 'firebase/firestore';
 
 // Initialize Firebase
 const config = {
-  apiKey: "XXXXXXXXXX",
-  authDomain: "XXXXXXXXXXX.firebaseapp.com",
-  databaseURL: "https://XXXXXXXXXX.firebaseio.com",
-  projectId: "XXXXXXXXXXXXX",
-  storageBucket: "XXXXXXXXXXXXX.appspot.com",
-  messagingSenderId: "XXXXXXXXXXXXXX"
+  apiKey: "",
+  authDomain: "",
+  databaseURL: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: "",
+  measurementId: ""
 };
 
 if (!firebase.apps.length) {
