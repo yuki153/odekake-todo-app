@@ -140,6 +140,7 @@ export default {
     },
     switchToDo(e) {
       if (this.isDeletable === false) {
+        if (e.target.classList.contains('is-actived')) return this.$router.push('/');
         this.$store.commit('mix-todo-item/setTodoState', {
           key: e.target.dataset.id,
           name: e.target.innerText,
@@ -187,9 +188,10 @@ export default {
   &__section {
     display: flex;
     flex-flow: column nowrap;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     height: calc(100vh - (#{$app-header-height + $app-footer-height}));
+    overflow-y: scroll;
   }
 }
 
