@@ -105,7 +105,8 @@ module.exports = {
   */
   build: {
     publicPath: '/assets/',
-    extractCSS: true,
+    // https://github.com/nuxt/nuxt.js/issues/4885#issuecomment-533015230
+    extractCSS: { ignoreOrder: true },
 
     // https://github.com/nuxt/nuxt.js/issues/2260#issuecomment-367114722
     // https://www.hypertextcandy.com/nuxt-ie11-polyfill
