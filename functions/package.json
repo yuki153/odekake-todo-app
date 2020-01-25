@@ -23,6 +23,8 @@
     "sass-loader": "^7.1.0"
   },
   "devDependencies": {
+    "@babel/runtime-corejs2": "^7.8.3",
+    "core-js": "2",
     "typescript": "^3.2.2"
   },
   "engines": {
