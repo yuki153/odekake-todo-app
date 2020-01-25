@@ -55,7 +55,7 @@
 ### 事前準備 ①
 
 [Firebase](https://firebase.google.com/?hl=ja) にて事前にプロジェクトを作成しておく必要があります  
-下記ファイルを自身の firebase の設定に書き換えます
+下記ファイルを自身の Firebase の設定に書き換えます
 
 #### src/plugins/firebase.js
 
