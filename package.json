@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "setup": "cd src && yarn install && cd ../ && cd functions && yarn install && cd ../",
+    "dev": "npm --prefix src run dev",
     "build": "rm -rf public/* && npm --prefix src run build && cp -R functions/nuxt/dist/client/ public/assets && cp -R src/static/* public",
     "serve": "npm run build && npm --prefix functions run build && firebase serve --only functions,hosting"
   }

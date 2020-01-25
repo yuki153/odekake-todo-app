@@ -159,6 +159,7 @@ export default {
     align-items: center;
     height: calc(100vh - (#{$app-header-height + $app-footer-height}));
     padding: 16px 16px 0;
+    overflow-y: scroll;
   }
 }
 </style>
