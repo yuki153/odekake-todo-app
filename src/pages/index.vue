@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import FirebaseQuery from "~/plugins/firebase-query.js";
 import AppLoadding from '~/components/single/app-loading';
 import MixActionControllers from '~/components/mix/mix-action-controllers';
 import MixIconSelectionScreen from '~/components/mix/mix-icon-selection-screen';
