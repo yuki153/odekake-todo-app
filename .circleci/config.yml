@@ -6,19 +6,35 @@ jobs:
     steps:
       - checkout
 
-      # src 配下で依存関係のインストール
-      - run: cd src
+      # functions 配下で依存関係のインストール
+      - run: cd functions
 
       - restore_cache:
           keys:
-            - yarn-packages-v1-{{ checksum "yarn.lock" }}
+            - functions-yarn-packages-v1-{{ checksum "yarn.lock" }}
 
       - run:
           name: 依存パッケージ全てをインストール
           command: yarn install --frozen-lockfile
 
       - save_cache:
-          key: yarn-packages-v1-{{ checksum "yarn.lock" }}
+          key: functions-yarn-packages-v1-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+
+      # src 配下で依存関係のインストール
+      - run: cd ../ && cd src
+
+      - restore_cache:
+          keys:
+            - dev-yarn-packages-v1-{{ checksum "yarn.lock" }}
+
+      - run:
+          name: 依存パッケージ全てをインストール
+          command: yarn install --frozen-lockfile
+
+      - save_cache:
+          key: dev-yarn-packages-v1-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
 
