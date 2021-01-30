@@ -7,55 +7,53 @@ jobs:
       - checkout
 
       # functions 配下で依存関係のインストール
-      - run: cd functions
-
       - restore_cache:
           keys:
-            - functions-yarn-packages-v1-{{ checksum "yarn.lock" }}
+            - functions-yarn-packages-v3-{{ checksum "functions/yarn.lock" }}
 
       - run:
-          name: 依存パッケージ全てをインストール
-          command: yarn install --frozen-lockfile
+          name: function 配下の依存パッケージ全てをインストール
+          command: yarn --cwd functions install --frozen-lockfile
 
       - save_cache:
-          key: functions-yarn-packages-v1-{{ checksum "yarn.lock" }}
+          key: functions-yarn-packages-v3-{{ checksum "functions/yarn.lock" }}
           paths:
             - ~/.cache/yarn
 
       # src 配下で依存関係のインストール
-      - run: cd ../ && cd src
-
       - restore_cache:
           keys:
-            - dev-yarn-packages-v1-{{ checksum "yarn.lock" }}
+            - dev-yarn-packages-v3-{{ checksum "src/yarn.lock" }}
 
       - run:
-          name: 依存パッケージ全てをインストール
-          command: yarn install --frozen-lockfile
+          name: src 配下の依存パッケージ全てをインストール
+          command: yarn --cwd src install --frozen-lockfile
 
       - save_cache:
-          key: dev-yarn-packages-v1-{{ checksum "yarn.lock" }}
+          key: dev-yarn-packages-v3-{{ checksum "src/yarn.lock" }}
           paths:
             - ~/.cache/yarn
 
       # root 階層で firebase-tools のインストール
-      - run: cd ../
-
       - restore_cache:
           keys:
-            - firebase-tools-v1-{{ checksum "yarn.lock" }}
+            - firebase-tools-v3
 
       - run: yarn add --dev firebase-tools --frozen-lockfile
 
       - save_cache:
-          key: firebase-tools-v1-{{ checksum "yarn.lock" }}
+          key: firebase-tools-v3
           paths:
             - ~/.cache/yarn
 
       #　deploy and build
       - run:
-          name:
-          command: sed -i 's/XXXXXXXXXX/${API_KEY}/g' ./src/plugins/firebase.js
+          name: sed による置換処理で apiKey を設定
+          # single quote だと囲った文字全てエスケープされてしまうため変数展開されない
+          command: sed -i "s/XXXXXXXXXX/${API_KEY}/g" ./src/plugins/firebase.js
+
+      # Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
+      - run: npm config set scripts-prepend-node-path true
       - run:
           name: build
           command: yarn build
@@ -69,7 +67,6 @@ workflows:
       - build:
           filters:
             tags:
-              only: /.*/
+              only: /^v[0-9](\.[0-9])*/
             branches:
               ignore: /.*/
-
