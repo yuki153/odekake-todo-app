@@ -1,13 +1,59 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-# Use a package of configuration called an orb.
-orbs:
-  # Declare a dependency on the welcome-orb
-  welcome: circleci/welcome-orb@0.4.1
-# Orchestrate or schedule a set of jobs
+jobs:
+  build:
+    docker:
+      - image: circleci/node:14.15.4
+    steps:
+      - checkout
+
+      # src 配下で依存関係のインストール
+      - run: cd src
+
+      - restore_cache:
+          keys:
+            - yarn-packages-v1-{{ checksum "yarn.lock" }}
+
+      - run:
+          name: 依存パッケージ全てをインストール
+          command: yarn install --frozen-lockfile
+
+      - save_cache:
+          key: yarn-packages-v1-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+
+      # root 階層で firebase-tools のインストール
+      - run: cd ../
+
+      - restore_cache:
+          keys:
+            - firebase-tools-v1-{{ checksum "yarn.lock" }}
+
+      - run: yarn add --dev firebase-tools --frozen-lockfile
+
+      - save_cache:
+          key: firebase-tools-v1-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+
+      #　deploy and build
+      - run:
+          name:
+          command: sed -i 's/XXXXXXXXXX/${API_KEY}/g' ./src/plugins/firebase.js
+      - run:
+          name: build
+          command: yarn build
+      - run:
+          name: deploy
+          command: ./node_modules/.bin/firebase deploy --project first-project-42ca3 --token=${FIREBASE_TOKEN}
+
 workflows:
-  # Name the workflow "welcome"
-  welcome:
-    # Run the welcome/run job in its own container
+  firebase-deploy:
     jobs:
-      - welcome/run
+      - build:
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+
